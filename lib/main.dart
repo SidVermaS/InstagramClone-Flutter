@@ -1,100 +1,187 @@
-import 'dart:convert';
-
-import 'package:eventflutterapp/models/user.dart';
+import 'package:badges/badges.dart';
+import 'package:eventapp/CheckoutWidget.dart';
+import 'package:eventapp/foodmodel.dart';
+import 'package:eventapp/homebloc/bloc.dart';
+import 'package:eventapp/homebloc/homebloc_bloc.dart';
+import 'package:eventapp/homebloc/homebloc_state.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:flutter_phoenix/flutter_phoenix.dart';
-import 'package:eventflutterapp/localizations/my_localizations.dart';
-import 'package:eventflutterapp/screens/home.dart';
-import 'package:eventflutterapp/screens/login.dart';
-import 'package:eventflutterapp/utils/global_variables_and_methods.dart';
-import 'package:eventflutterapp/localizations/my_localizations.dart';
-import 'package:eventflutterapp/utils/global_variables_and_methods.dart';
-import 'package:eventflutterapp/utils/shared_pref_manager.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
-void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  SharedPrefManager.getSharedPref().then((SharedPreferences sharedPreferences) {
-    SharedPrefManager.getValue('user').then((String userString) {
-      print('~~~ userString: $userString');
-      if (userString != null) {
-        GlobalVariablesAndMethods.user =
-            User.fromJsonGlobalVariablesAndMethods(
-                jsonDecode(userString));
-        print('~~~ 0th');
-      }
-      print('~~~ 1st');
-      runApp(Phoenix(child: MyApp()));
-    });
-  });
-}
-class MyApp extends StatefulWidget  {
-  _MyAppState createState()=>_MyAppState();
 
-  static void setLocale(BuildContext context, Locale newLocale) {
-    _MyAppState state =
-    context.ancestorStateOfType(TypeMatcher<_MyAppState>());
 
-    state.setState(() {
-      state.locale = newLocale;
-    });
-  }
-}
-class _MyAppState extends State<MyApp> {
+void main() => runApp(FoodoApp());
 
-  Locale locale;
-  bool localeLoaded = false;
-
+class FoodoApp extends StatelessWidget {
   @override
-  void initState() {
-    super.initState();
-
-    this._fetchLocale().then((locale) {
-      setState(() {
-        this.localeLoaded = true;
-        this.locale = locale;
-      });
-    });
+  Widget build(BuildContext context) {
+    return new MaterialApp(
+      title: 'FoodOApp',
+      home: BlocProvider<HomeblocBloc>(
+        create:(context) => HomeblocBloc(),
+        child: FoodMainWidgetStateless()
+      ),
+      debugShowCheckedModeBanner: false,
+    );
   }
+}
+
+class FoodMainWidgetStateless extends StatelessWidget {
+
+  FoodMainWidgetStateless({Key key}) : super(key: key);
+  List<String> _foodName = ["Burrito", "Meat Ball"];
+  List<String> _foodImage = ["https://images.pexels.com/photos/461198/pexels-photo-461198.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500",
+    "https://hips.hearstapps.com/del.h-cdn.co/assets/18/06/1600x800/landscape-1517928338-delish-mongolian-ramen-and-meatballs-still001.jpg?resize=480:*"];
+  List<int> _foodPrice = [5,7];
+  int total = 0;
 
   @override
   Widget build(BuildContext context) {
+    HomeblocBloc homeblocBloc = BlocProvider.of<HomeblocBloc>(context);
 
-    if (this.localeLoaded == false) {
-      return CircularProgressIndicator();
-    } else {
-      return MaterialApp(
-          title: 'eventflutterapp',
-          theme: ThemeData(
-              primaryColor: Colors.blue
-          ),
-          debugShowCheckedModeBanner: false,
-          localeResolutionCallback: (deviceLocale, supportedLocales) {
-            if (this.locale == null) {
-              this.locale = deviceLocale;
-            }
-            return this.locale;
-          },
-          localizationsDelegates: [
-            MyLocalizationsDelegate(),
-            GlobalMaterialLocalizations.delegate,
-            GlobalWidgetsLocalizations.delegate,
+    return Scaffold(
+        appBar: AppBar(
+          title: Text("FoodOApp"),
+          actions: <Widget>[
+            Container(
+              height: 30.0,
+              width: 30.0,
+              padding: EdgeInsets.fromLTRB(0, 15, 15, 0),
+
+              child: BlocBuilder<HomeblocBloc, HomeBlocState>(
+                  buildWhen: (previousState, currentState){
+                    if(previousState == currentState)
+                      {
+                        print(previousState);
+                        print(currentState);
+                        return false;
+                      }
+                    print(previousState);
+                    print(currentState);
+                    return true;
+                  },
+                  builder: (context, state)
+                {
+                  if(state is HomeBlocAdded)
+                    {
+                      print(state);
+                      ++total;
+                      print(total);
+                    }
+                  else if (state is HomeBlocRemoved){
+                    --total;
+                    if(total<0)
+                      {
+                        total=0;
+                      }
+                  }
+                  return Badge(
+                  badgeColor: Colors.deepOrangeAccent,
+                  toAnimate: true,
+                child: IconButton(icon: Icon(Icons.shopping_cart),
+                onPressed: (){
+                  homeblocBloc.add(HomeBlocLoadEvent());
+                Navigator.push(
+                context,
+                MaterialPageRoute(builder:(context) => CheckoutWidget())
+                );
+                },),
+                badgeContent: Text(total.toString()),
+                );
+                }
+              ),
+
+            )
           ],
-          supportedLocales: [
-            const Locale('en', ''),
-            const Locale('hi', ''),
-          ],
-          home:GlobalVariablesAndMethods.user==null?Login():Home()
-      );
-    }
+        ),
+        body: Center(
+          child: ListView.builder(
+              itemCount: _foodName.length,
+              itemBuilder: (BuildContext context, int count)
+              {
+                return Card(
+                  elevation: 26.0,
+                  color: Colors.white70,
+                  child: Column(
+                    children: <Widget>[
+                      Image.network(_foodImage[count]),
+                      Row(
+                        children: <Widget>[
+                          Spacer(flex:2),
+                          Text("Name: "+_foodName[count], style: TextStyle(color: Colors.deepOrangeAccent, fontSize: 20.0),),
+                          Spacer(),
+                          Text("Price: "+_foodPrice[count].toString()+"\$",  style: TextStyle(color: Colors.deepOrangeAccent, fontSize: 20.0)),
+                          Spacer(flex: 2,),
+                        ],
+                      ),
+                      ButtonBar(
+                        children: <Widget>[
+                          FlatButton(
+                              child: Icon(Icons.add, size: 40.0,),
+                              onPressed: () {
+                                homeblocBloc.add(HomeBlocAddEvent(
+                                    FoodModel(
+                                    name:_foodName[count],
+                                    price:_foodPrice[count])));
+                              }
+                          ),
+                          FlatButton(
+                              child: Icon(Icons.remove, size: 40.0,),
+                              onPressed: (){
+                                homeblocBloc.add(HomeBlocRemoveEvent(_foodName[count]));
+                              }
+                          )
+                        ],
+                      )
+                    ],
+                  ),
+
+                );
+              }),
+        )
+
+    );
   }
-  Future<Locale> _fetchLocale() async {
-    var prefs = await SharedPreferences.getInstance();
-    if (prefs.getString('language_code') == null) {
-      return null;
-    }
-    return Locale(prefs.getString('language_code'),
-        '');
-  }
+
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
