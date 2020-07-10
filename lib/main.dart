@@ -12,8 +12,8 @@ class MyApp extends StatelessWidget {
   
   @override
   Widget build(BuildContext context) {
-     Screen.height=MediaQuery.of(context).size.height;
-     Screen.width=MediaQuery.of(context).size.width;
+    //  Screen.height=MediaQuery.of(context).size.height;
+    //  Screen.width=MediaQuery.of(context).size.width;
   
     return new MaterialApp(
       title: 'Instagram',
