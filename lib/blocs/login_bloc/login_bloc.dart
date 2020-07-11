@@ -17,7 +17,7 @@ class LoginBloc with LoginValidator {
   Stream<String> get passwordStream=>_passwordBehaviorSubject.stream.transform(passwordValidator);
   // Stream<bool> get isVisibleStream=>_isVisibleStreamController.stream;
 
-  Stream<bool> get submitCheck=>Rx.combineLatest2(mobileNoStream, passwordStream, (email, password)=>true);
+  Stream<bool> get submitCheck=>Rx.combineLatest2(mobileNoStream, passwordStream, (mobileNo, password)=>true);
 
 
 

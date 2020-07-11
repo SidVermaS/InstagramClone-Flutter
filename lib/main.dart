@@ -1,5 +1,7 @@
 import 'package:badges/badges.dart';
 import 'package:eventapp/screens/login.dart';
+import 'package:eventapp/screens/register/register_phone.dart';
+import 'package:eventapp/utils/global.dart';
 import 'package:eventapp/utils/screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -23,6 +25,10 @@ class MyApp extends StatelessWidget {
       title: 'Instagram',
       home: Login(),
       debugShowCheckedModeBanner: false,
+      routes: {
+        Global.routes.login:(context)=> Login(),
+        Global.routes.register_phone:(context)=> RegisterPhone(),
+      },
     );
   }
 }
