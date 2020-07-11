@@ -16,6 +16,10 @@ class MyApp extends StatelessWidget {
     //  Screen.width=MediaQuery.of(context).size.width;
   
     return new MaterialApp(
+      theme: ThemeData(
+        primaryColor: Screen.eventGrey,
+        primaryColorDark: Screen.eventBlue
+      ),
       title: 'Instagram',
       home: Login(),
       debugShowCheckedModeBanner: false,

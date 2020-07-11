@@ -1,14 +1,12 @@
+import 'package:eventapp/utils/screen.dart';
 import 'package:flutter/material.dart';
 
-class Screen  {
-  static BuildContext context;
-  static double height=0.0, width=0.0;
-  static Color eventBlue=Colors.blue, 
-  eventGrey=Colors.grey[200];
+class AppWidgets  {
+  BuildContext context;
 
   Widget getRaisedButton(VoidCallback voidCallback, String text)  {
     return RaisedButton(
-      color: eventBlue,
+      color: Screen.eventBlue,
       child: Text(text, style: TextStyle(color: Colors.white),),
       onPressed: voidCallback,
     );
