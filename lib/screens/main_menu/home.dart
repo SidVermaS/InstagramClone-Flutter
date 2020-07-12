@@ -1,12 +1,18 @@
 import 'package:eventapp/utils/global.dart';
 import 'package:eventapp/utils/shared_pref_manager.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_phoenix/flutter_phoenix.dart';
 
-class Home extends StatelessWidget{
+class Home extends StatefulWidget {
+  _HomeState createState()=>_HomeState();
+}
+
+class _HomeState extends State<Home>{
   Widget build(BuildContext context)  {
     return Scaffold(
-      body:Center(child: Text('home'))
+      body: Center(child: RaisedButton(child: Text('logout'),onPressed: () {
+        Global.sharedPrefManager.removeAll();
+        
+      },))
     );
   }
 }
