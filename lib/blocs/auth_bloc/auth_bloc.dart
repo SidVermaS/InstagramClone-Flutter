@@ -17,7 +17,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
   Stream<AuthState> mapEventToState(AuthEvent event) async*  {
     if(event is AppStartedEvent)  {
-       Global.sharedPrefManager.getSharedPref().then((SharedPreferences sharedPreferences) async* {
+       await Global.sharedPrefManager.getSharedPref();
         String userString=await Global.sharedPrefManager.getValue('user');
 
         if(userString==null)  {
@@ -26,7 +26,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
           Global.user=User.fromJsonGlobal(jsonDecode(userString));
           yield AuthenticatedState(Global.user);
         }
-      });
     }
   }
 

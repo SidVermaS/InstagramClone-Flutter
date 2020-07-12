@@ -16,7 +16,7 @@ class AuthenticatedState extends AuthState  {
 
   AuthenticatedState(this.user);
 
-  List<Object> get props=>null;
+  List<Object> get props=>[user];
 
 }
 

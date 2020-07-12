@@ -1,8 +1,13 @@
+import 'package:eventapp/screens/login.dart';
 import 'package:eventapp/screens/main_menu/add_post.dart';
 import 'package:eventapp/screens/main_menu/explore.dart';
 import 'package:eventapp/screens/main_menu/home.dart';
-import 'package:eventapp/screens/main_menu/self_profile.dart';
+import 'package:eventapp/screens/main_menu/profile.dart';
 import 'package:eventapp/screens/main_menu/users.dart';
+import 'package:eventapp/screens/register/register_details.dart';
+import 'package:eventapp/screens/register/register_phone.dart';
+import 'package:eventapp/screens/register/register_success.dart';
+import 'package:eventapp/utils/global.dart';
 import 'package:eventapp/utils/screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -14,7 +19,7 @@ class Index extends StatefulWidget{
 
 class _IndexState extends State<Index>  {
   int _currentIndex=0;
-  List<Widget> widgetsList=[Home(), Explore(), AddPost(), Users(), SelfProfile()];
+  List<Widget> widgetsList=[Home(), Explore(), AddPost(), Users(), Profile()];
   Widget build(BuildContext context)  {
     return CupertinoTabScaffold(
       
@@ -51,6 +56,7 @@ class _IndexState extends State<Index>  {
               top: false,
               bottom: false,
               child: CupertinoApp(
+            
                 theme: CupertinoThemeData(
                   primaryColor: Screen.eventGrey,
                   primaryContrastingColor:Screen.eventBlue
@@ -60,7 +66,9 @@ class _IndexState extends State<Index>  {
                   
                   resizeToAvoidBottomInset: false,
                   child: widgetsList[_currentIndex] 
-                )
+                ),
+                 routes: {
+                },
               )
             );
           }
