@@ -19,7 +19,7 @@ class AppWidgets  {
   }
 
   Widget getSmallFadedText(String text) {
-    return Text(text, style: TextStyle(color: Colors.grey, fontSize: 12));
+    return Text(text, style: TextStyle(color: Colors.grey, fontSize: 12, fontWeight: FontWeight.w600));
   }
 
   Widget getSmallBoldText(String text) {

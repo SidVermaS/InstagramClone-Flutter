@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:eventapp/utils/global.dart';
-import 'package:eventapp/utils/regex.dart';
 
 mixin LoginValidator  {
   

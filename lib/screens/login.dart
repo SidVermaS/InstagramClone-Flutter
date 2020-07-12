@@ -4,6 +4,7 @@ import 'package:eventapp/utils/global.dart';
 import 'package:eventapp/utils/screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:load/load.dart';
 
 class Login extends StatefulWidget  {
   _LoginState createState()=>_LoginState();
@@ -23,7 +24,10 @@ class _LoginState extends State<Login> {
   
   
   }
-  
+   void dispose()  {
+    super.dispose();
+    _loginBloc.dispose();
+  }
   Widget build(BuildContext context)  {
 
     return Scaffold(
@@ -130,7 +134,10 @@ class _LoginState extends State<Login> {
               builder: (BuildContext context, AsyncSnapshot<bool> asyncSnapshot)  {
                 return Container(
                   margin: EdgeInsets.fromLTRB(0, 20, 0, 20),
-                  child:_appWidgets.getRaisedButton(asyncSnapshot.data==null || !asyncSnapshot.data ?null:(){}, 'Log in'));
+                  child:_appWidgets.getRaisedButton(asyncSnapshot.data==null || !asyncSnapshot.data ?null:(){ 
+                    FocusScope.of(context).unfocus();
+                    
+                  }, 'Log in'));
               }
             ),
             GestureDetector(

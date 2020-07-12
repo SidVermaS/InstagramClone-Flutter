@@ -1,4 +1,4 @@
-import 'package:eventapp/blocs/login_bloc/register_phone_bloc.dart';
+import 'package:eventapp/blocs/register_bloc/register_phone_bloc.dart';
 import 'package:eventapp/utils/app_widgets.dart';
 import 'package:eventapp/utils/screen.dart';
 import 'package:flutter/material.dart';
@@ -11,18 +11,21 @@ class RegisterPhone extends StatefulWidget  {
 class _RegisterPhoneState extends State<RegisterPhone> {
   final RegisterPhoneBloc _registerPhoneBloc=RegisterPhoneBloc();
   bool isHidden=true;
-  AppWidgets _appWidgets=AppWidgets();
+  
   void initState()  {
     super.initState();
 
     Future.delayed(Duration.zero, ()  {
-      _appWidgets.context=context;
+      _registerPhoneBloc.appWidgets.context=context;
       Screen.context=context;
     });
   
   
   }
-  
+   void dispose()  {
+    super.dispose();
+    _registerPhoneBloc.dispose();
+  }
   Widget build(BuildContext context)  {
 
     return Scaffold(
@@ -30,15 +33,15 @@ class _RegisterPhoneState extends State<RegisterPhone> {
         child: GestureDetector(
               behavior: HitTestBehavior.translucent,
               onTap: () {
-                
+                Navigator.of(context).pop();
               },
               child:Container(
                 height: 50,
                 child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                _appWidgets.getSmallFadedText('Already have an account? '),
-                _appWidgets.getSmallBoldText('Log in.')
+                 _registerPhoneBloc.appWidgets.getSmallFadedText('Already have an account? '),
+                 _registerPhoneBloc.appWidgets.getSmallBoldText('Log in.')
             ],))),
       ),
       body: Container(
@@ -46,8 +49,8 @@ class _RegisterPhoneState extends State<RegisterPhone> {
         child: ListView(
         children: <Widget>[
           Container(
-            margin: EdgeInsets.fromLTRB(0,85,0,10),
-            padding: EdgeInsets.fromLTRB(48,15,48,15),
+            margin: EdgeInsets.fromLTRB(0,0,0,0),
+            // padding: EdgeInsets.fromLTRB(48,15,48,15),
             child: Image.asset('assets/images/register_profile.png',), ),
             StreamBuilder<String>(
               stream: _registerPhoneBloc.mobileNoStream,
@@ -84,75 +87,22 @@ class _RegisterPhoneState extends State<RegisterPhone> {
                 );
               }
             ),
-            SizedBox(height: 16),
+            Container(
+                  margin: EdgeInsets.fromLTRB(0, 20, 0, 20),
+                  child:Text('You may receive SMS updates from Instagram and can opt out any time', style: TextStyle(color: Colors.grey, fontSize: 12, fontWeight: FontWeight.w600), textAlign: TextAlign.center,)),
             StreamBuilder(
               initialData: false,
               stream: _registerPhoneBloc.submitCheck,
               builder: (BuildContext context, AsyncSnapshot<bool> asyncSnapshot)  {
-                return Container(
-                  margin: EdgeInsets.fromLTRB(0, 20, 0, 20),
-                  child:_appWidgets.getRaisedButton(asyncSnapshot.data==null || !asyncSnapshot.data ?null:(){}, 'Log in'));
+                return _registerPhoneBloc.appWidgets.getRaisedButton(asyncSnapshot.data==null || !asyncSnapshot.data ?null:(){
+                  FocusScope.of(context).unfocus();
+                  _registerPhoneBloc.verifyMobileNoExists();
+                }, 'Next');
               }
             ),
-          Center(child: _appWidgets.getSmallFadedText('You may receive SMS updates from Instagram and can opt out any time')),
            
         ])
       ),
     );
   }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 }
