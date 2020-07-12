@@ -136,7 +136,7 @@ class _LoginState extends State<Login> {
                   margin: EdgeInsets.fromLTRB(0, 20, 0, 20),
                   child:_appWidgets.getRaisedButton(asyncSnapshot.data==null || !asyncSnapshot.data ?null:(){ 
                     FocusScope.of(context).unfocus();
-                    
+                    _loginBloc.loginAccount();
                   }, 'Log in'));
               }
             ),

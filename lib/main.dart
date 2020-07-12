@@ -1,5 +1,5 @@
 import 'package:badges/badges.dart';
-import 'package:eventapp/screens/home.dart';
+import 'package:eventapp/screens/main_menu/index.dart';
 import 'package:eventapp/screens/login.dart';
 import 'package:eventapp/screens/register/register_details.dart';
 import 'package:eventapp/screens/register/register_phone.dart';
@@ -28,14 +28,14 @@ class MyApp extends StatelessWidget {
         primaryColorDark: Screen.eventBlue
       ),
       title: 'Instagram',
-      home: RegisterSuccess(),
+      home: Index(),
      
       routes: {
         Global.routes.login:(context)=> Login(),
         Global.routes.register_phone:(context)=> RegisterPhone(),
         Global.routes.register_details:(context)=> RegisterDetails(),
         Global.routes.register_success:(context)=> RegisterSuccess(),
-         Global.routes.home:(context)=> Home(),
+         Global.routes.index:(context)=> Index(),
       },
     )));
   }
