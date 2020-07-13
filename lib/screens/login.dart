@@ -16,10 +16,11 @@ class _LoginState extends State<Login> {
   AppWidgets _appWidgets=AppWidgets();
   void initState()  {
     super.initState();
-
-    Future.delayed(Duration.zero, ()  {
-      _appWidgets.context=context;
+     _appWidgets.context=context;
       Screen.context=context;
+    Future.delayed(Duration.zero, ()  {
+     Screen.height=MediaQuery.of(context).size.height;
+     Screen.width=MediaQuery.of(context).size.width;
     });
   
   

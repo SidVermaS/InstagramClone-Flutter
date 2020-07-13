@@ -9,6 +9,9 @@ import 'package:eventapp/screens/register/register_phone.dart';
 import 'package:eventapp/screens/register/register_success.dart';
 import 'package:eventapp/utils/global.dart';
 import 'package:eventapp/utils/screen.dart';
+
+import 'dart:math' as math;
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -56,14 +59,32 @@ class _IndexState extends State<Index>  {
               top: false,
               bottom: false,
               child: CupertinoApp(
-            
+                
                 theme: CupertinoThemeData(
                   primaryColor: Screen.eventGrey,
                   primaryContrastingColor:Screen.eventBlue
                 ),
                 debugShowCheckedModeBanner: false,
                 home: CupertinoPageScaffold(
+                  navigationBar: CupertinoNavigationBar(
+                    middle:
+                     Container(
+                       margin: EdgeInsets.fromLTRB(8, 0, 8, 0),                       
+                       child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[ Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: <Widget>[
+                        Icon(FontAwesomeIcons.instagram, color: Colors.black),
+                        SizedBox(width: 5),
+                        Image.asset('assets/images/instagram.png', height: 35,)
+                    ],),
+                    GestureDetector(child: Transform.rotate(angle: 31, child: Icon(Icons.send, color: Colors.black,)), onTap:  ()  {
+
+                    })
+                  ])),
                   
+                  ),
                   resizeToAvoidBottomInset: false,
                   child: widgetsList[_currentIndex] 
                 ),
