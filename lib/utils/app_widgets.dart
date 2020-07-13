@@ -25,4 +25,7 @@ class AppWidgets  {
   Widget getSmallBoldText(String text) {
     return Text(text, style: TextStyle(color: Colors.black, fontWeight: FontWeight.w700 , fontSize: 12));
   }  
+   Widget getName(String text) {
+    return Text(text, style: TextStyle(color: Colors.black, fontWeight: FontWeight.w700 , fontSize: 15));
+  }  
 }

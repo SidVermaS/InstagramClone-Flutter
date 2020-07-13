@@ -13,42 +13,78 @@ import 'package:eventapp/models/post.dart';
 class HomeBloc extends Bloc<HomeEvent, HomeState> {
 
   HomeBloc():super(null);
-
+  
   HomeState get initialState=>HomeInitialState(); 
 
+  bool notLoading=true;
+  int page=0, user_id=Global.user.user_id;
+  List<Post> postsList=List<Post>(); 
+  Map<String, dynamic> bodyMap;
+  URLQueryParams queryParams=URLQueryParams();
   Stream<HomeState> mapEventToState(HomeEvent event) async* {
-
-    if(event is FetchHomeEvent)  { 
-      try {
-        event.page=event.page+=1;
-        URLQueryParams queryParams=URLQueryParams();
-        queryParams.append('page', event.page);
-        queryParams.append('user_id', event.user_id);
-        http.Response response=await Global.connect.sendGet('${ConstantSubUrls.post}?${queryParams.toString()}');
-        Map<String, dynamic> mapResponse=jsonDecode(response.body);
-
-        if(response.statusCode==200)  {
-          List<dynamic> dynamicList=mapResponse['posts'] as List<dynamic>; 
-          List<Post> postsList=List<Post>(); 
-
-          dynamicList.map((i)=>postsList.add(Post.fromJson(i)));
-          if(event.page==0) {
-            yield HomeLoadedState(postsList: postsList);
-          } else  {
-            yield HomeMoreLoadedState(postsList: postsList);
+    if(notLoading)  {
+      notLoading=false;
+      if(event is FetchHomeEvent)  { 
+        try {
+        
+          queryParams=URLQueryParams();
+          queryParams.append('page', page);
+          queryParams.append('user_id', user_id);
+          http.Response response=await Global.connect.sendGet('${ConstantSubUrls.post}?${queryParams.toString()}');
+          Map<String, dynamic> mapResponse=jsonDecode(response.body);
+  
+          if(response.statusCode==200)  {
+            List<dynamic> dynamicList=mapResponse['posts'] as List<dynamic>; 
+            
+            dynamicList.map((i)=>postsList.add(Post.fromJson(i))).toList();
+            if(page==0) {
+              yield HomeLoadedState(postsList: postsList);
+            } else  {
+              yield HomeMoreLoadedState(postsList: postsList);
+            }
+          } else  {     
+            page--;     
+            yield HomeErrorState(message: mapResponse['message'], postsList: postsList);
+            
           }
-        } else  {
-          yield HomeErrorState(message: mapResponse['message']);
+        } catch(e)  {
+          page--;
+          yield HomeErrorState(message: e.toString(), postsList:postsList); 
         }
-      } catch(e)  {
-        yield HomeErrorState(message: e.toString()); 
+        notLoading=true;
+      } else if(event is ModifyFavoriteEvent) {
+        yield* mapModifyEventToState(event);
       }
     }
   }
+
+  Stream<HomeState> mapModifyEventToState(HomeEvent event) async* {
+    if(event is ModifyFavoriteEvent)  {
+        try {
+          postsList[event.index].status=postsList[event.index].status=='like'?'remove':'like';
+          yield HomeMoreLoadedState(postsList: postsList);
+
+          bodyMap=Map<String, dynamic>();
+          bodyMap['post_id']=postsList[event.index].post_id;
+          bodyMap['user_id']=Global.user.user_id;
+          bodyMap['status']=postsList[event.index].status;
+          http.Response response=await Global.connect.sendPost('${ConstantSubUrls.reaction}', bodyMap);
+          Map<String, dynamic> mapResponse=jsonDecode(response.body);
+  
+          if(response.statusCode==200)  {
+            
+          } else  {   
+
+            yield HomeErrorState(message: mapResponse['message'], postsList: postsList);
+            
+          }
+        } catch(e)  {
+          yield HomeErrorState(message: e.toString(), postsList:postsList); 
+        }
+
+
+
+
+
+  }
 }
-
-
-
-
-
-

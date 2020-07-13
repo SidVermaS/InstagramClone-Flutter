@@ -28,7 +28,8 @@ class HomeMoreLoadedState extends HomeState {
 class HomeErrorState extends HomeState  {
 
   String message;
-  HomeErrorState({this.message});
+  List<Post> postsList;
+  HomeErrorState({this.message,this.postsList});
 
-  List<Object> get props=>[message];
+  List<Object> get props=>[message,postsList];
 }

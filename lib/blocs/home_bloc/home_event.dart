@@ -5,10 +5,15 @@ abstract class HomeEvent extends Equatable  {
 }
 
 class FetchHomeEvent extends HomeEvent  {
-  int user_id, page;
 
-  FetchHomeEvent({this.user_id, this.page});
+  FetchHomeEvent();
 
-  List<Object> get props=>[user_id, page];
+  List<Object> get props=>null;
 
+}
+class ModifyFavoriteEvent extends HomeEvent  {
+  int index;
+  ModifyFavoriteEvent({this.index});
+
+  List<Object> get props=>[index];
 }

@@ -1,3 +1,4 @@
+import 'package:eventapp/blocs/home_bloc/home_bloc.dart';
 import 'package:eventapp/screens/login.dart';
 import 'package:eventapp/screens/main_menu/add_post.dart';
 import 'package:eventapp/screens/main_menu/explore.dart';
@@ -14,6 +15,7 @@ import 'dart:math' as math;
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class Index extends StatefulWidget{
@@ -22,7 +24,7 @@ class Index extends StatefulWidget{
 
 class _IndexState extends State<Index>  {
   int _currentIndex=0;
-  List<Widget> widgetsList=[Home(), Explore(), AddPost(), Users(), Profile()];
+  List<Widget> widgetsList=[BlocProvider(create:(context)=>HomeBloc(), child: Home()), Explore(), AddPost(), Users(), Profile()];
   Widget build(BuildContext context)  {
     return CupertinoTabScaffold(
       
