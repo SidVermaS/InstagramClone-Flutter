@@ -1,6 +1,6 @@
 import 'package:equatable/equatable.dart';
 
-abstract class HomeEvent extends Equatable  {
+abstract class HomeEvent  {
   
 }
 
@@ -13,6 +13,7 @@ class FetchHomeEvent extends HomeEvent  {
 }
 class ModifyFavoriteEvent extends HomeEvent  {
   int index;
+  
   ModifyFavoriteEvent({this.index});
 
   List<Object> get props=>[index];

@@ -22,53 +22,57 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   Map<String, dynamic> bodyMap;
   URLQueryParams queryParams=URLQueryParams();
   Stream<HomeState> mapEventToState(HomeEvent event) async* {
-    if(notLoading)  {
-      notLoading=false;
+    
+      
       if(event is FetchHomeEvent)  { 
-        try {
-        
-          queryParams=URLQueryParams();
-          queryParams.append('page', page);
-          queryParams.append('user_id', user_id);
-          http.Response response=await Global.connect.sendGet('${ConstantSubUrls.post}?${queryParams.toString()}');
-          Map<String, dynamic> mapResponse=jsonDecode(response.body);
-  
-          if(response.statusCode==200)  {
-            List<dynamic> dynamicList=mapResponse['posts'] as List<dynamic>; 
-            
-            dynamicList.map((i)=>postsList.add(Post.fromJson(i))).toList();
-            if(page==0) {
-              yield HomeLoadedState(postsList: postsList);
-            } else  {
-              yield HomeMoreLoadedState(postsList: postsList);
+        if(notLoading)  {
+          notLoading=false;
+          try {
+          
+            queryParams=URLQueryParams();
+            queryParams.append('page', page);
+            queryParams.append('user_id', user_id);
+            http.Response response=await Global.connect.sendGet('${ConstantSubUrls.post}?${queryParams.toString()}');
+            Map<String, dynamic> mapResponse=jsonDecode(response.body);
+    
+            if(response.statusCode==200)  {
+              List<dynamic> dynamicList=mapResponse['posts'] as List<dynamic>; 
+              
+              dynamicList.map((i)=>postsList.add(Post.fromJson(i))).toList();
+              if(page==0) {
+                yield HomeLoadedState(postsList: postsList);
+              } else  {
+                yield HomeMoreLoadedState(postsList: postsList);
+              }
+            } else  {     
+              page--;     
+              yield HomeErrorState(message: mapResponse['message'], postsList: postsList);
+              
             }
-          } else  {     
-            page--;     
-            yield HomeErrorState(message: mapResponse['message'], postsList: postsList);
-            
+          } catch(e)  {
+            page--;
+            yield HomeErrorState(message: e.toString(), postsList:postsList); 
           }
-        } catch(e)  {
-          page--;
-          yield HomeErrorState(message: e.toString(), postsList:postsList); 
-        }
         notLoading=true;
+        }
       } else if(event is ModifyFavoriteEvent) {
         yield* mapModifyEventToState(event);
       }
-    }
   }
 
-  Stream<HomeState> mapModifyEventToState(HomeEvent event) async* {
-    if(event is ModifyFavoriteEvent)  {
+  Stream<HomeState> mapModifyEventToState(ModifyFavoriteEvent event) async* {
+        
         try {
+          print('1: ${postsList[event.index].status}');
           postsList[event.index].status=postsList[event.index].status=='like'?'remove':'like';
+          print('2: ${postsList[event.index].status}');
           yield HomeMoreLoadedState(postsList: postsList);
 
           bodyMap=Map<String, dynamic>();
           bodyMap['post_id']=postsList[event.index].post_id;
           bodyMap['user_id']=Global.user.user_id;
           bodyMap['status']=postsList[event.index].status;
-          http.Response response=await Global.connect.sendPost('${ConstantSubUrls.reaction}', bodyMap);
+          http.Response response=await Global.connect.sendPatch('${ConstantSubUrls.reaction}', bodyMap);
           Map<String, dynamic> mapResponse=jsonDecode(response.body);
   
           if(response.statusCode==200)  {
@@ -81,10 +85,5 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
         } catch(e)  {
           yield HomeErrorState(message: e.toString(), postsList:postsList); 
         }
-
-
-
-
-
   }
 }

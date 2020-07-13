@@ -11,6 +11,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:shimmer/shimmer.dart';
 
 class Home extends StatefulWidget {
@@ -46,6 +47,7 @@ class _HomeState extends State<Home>{
             }
           },
           child: BlocBuilder<HomeBloc, HomeState> (builder: (context, state)  {
+             print('3: ${state.toString()}');
             if(state is HomeInitialState) {
               return loadShimmer();
             }
@@ -53,6 +55,7 @@ class _HomeState extends State<Home>{
                return loadPosts(state.postsList);
             }
             else if(state is HomeMoreLoadedState) {
+              
               return loadPosts(state.postsList);
             }
             else if(state is HomeErrorState && state.postsList.length>0)  {
@@ -120,23 +123,43 @@ class _HomeState extends State<Home>{
             ],)),
             Container(
               width:Screen.width,
-              height: Screen.height-(Screen.height*0.63),
+              height: Screen.height-(Screen.height*0.55),
              child: Image.network('${ConstantBaseUrls.photosPhotoBaseUrl}${postsList[index].photo_url}',fit: BoxFit.cover)),
            Container(
-             margin: EdgeInsets.fromLTRB(10, 10, 10, 10),
+             margin: EdgeInsets.fromLTRB(15, 10, 15, 5),
              child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: <Widget>[
              Row(
                mainAxisAlignment: MainAxisAlignment.start,
                children: <Widget>[
-                 GestureDetector(onTap:() {
-                   homeBloc.add(ModifyFavoriteEvent(index: index));
-                 }, child:postsList[index].status=='like'?Icon(Icons.favorite, color: Colors.red, size: 30):Icon(Icons.favorite_border, color: Colors.black, size: 30)),
-                 SizedBox(width: 10.0),
-                Icon(FontAwesomeIcons.facebookMessenger, color: Colors.black),
-             ]),
-             Icon(FontAwesomeIcons.save, color: Colors.black),
-           ],)
-        )
+                 GestureDetector(
+                   behavior: HitTestBehavior.translucent,
+                   onTap:() {
+                    homeBloc.add(ModifyFavoriteEvent(index: index));
+                  //  :'assets/images/fav_outline.jpg'
+                 }, child:postsList[index].status=='like'?Icon(Icons.favorite, size: 30, color: Colors.red):Icon(Icons.favorite_border, size: 30, color: Colors.black)),
+                 SizedBox(width: 17.0),
+                GestureDetector(onTap:()  {
+
+                }, child: Container(transform: Matrix4.translationValues(0,-1.5,0),child: Icon(FontAwesomeIcons.comment, size: 25, color: Colors.black)))
+                ]),
+                Icon(Icons.file_download, color: Colors.black, size: 30),
+              ],)
+            ),
+             Container(
+             margin: EdgeInsets.fromLTRB(15, 0, 15, 5),
+             child: Column(
+               crossAxisAlignment: CrossAxisAlignment.start,
+               children:<Widget>  [
+            appWidgets.getName('${postsList[index].reactions_count} reacts'),
+           Container(
+             margin: EdgeInsets.fromLTRB(0, 5, 0, 5),
+             child: RichText(text: TextSpan(text: '${postsList[index].user.name} ', style: TextStyle(color: Colors.black, fontSize: 15, fontWeight: FontWeight.bold), children:<TextSpan>[
+            TextSpan(text: postsList[index].caption, style: TextStyle(color: Colors.black87, fontSize: 15,fontWeight: FontWeight.normal)),
+
+            ]))),
+            postsList[index].comments_count>0?Text('View all ${postsList[index].comments_count} comments', style: TextStyle(color: Colors.black45, fontSize: 15,fontWeight: FontWeight.w400)):SizedBox(width: 0,height: 0,)
+            
+            ]))
           ]));
     });
   }

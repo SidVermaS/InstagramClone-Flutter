@@ -1,7 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:eventapp/models/post.dart';
 
-abstract class HomeState extends Equatable  {
+abstract class HomeState  {
 
 }
 
