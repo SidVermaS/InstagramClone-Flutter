@@ -172,8 +172,8 @@ class _HomeState extends State<Home>{
                 GestureDetector(
                   behavior: HitTestBehavior.translucent,
                   onTap:()  {
-                   context.read<ChangeCupertinoTabBar>().toggle();
-                  Screen.navigateToPage(BlocProvider(create:(context)=>CommentsBloc(post_id: postsList[index].post_id), child: Comments(post: postsList[index],)));
+                  
+                  navigateAndRefresh(BlocProvider(create:(context)=>CommentsBloc(post_id: postsList[index].post_id, comments_count: postsList[index].comments_count), child: Comments(post: postsList[index],)), index);
                 }, child: Container(transform: Matrix4.translationValues(0,-1.5,0),child: Icon(FontAwesomeIcons.comment, size: 25, color: Colors.black)))
                 ]),
                 Icon(Icons.file_download, color: Colors.black, size: 30),
@@ -197,5 +197,11 @@ class _HomeState extends State<Home>{
           ]));
     });
   }
-  
+  void navigateAndRefresh(Widget widget, int index) async {
+     context.read<ChangeCupertinoTabBar>().toggle();
+    Navigator.of(context).push(MaterialPageRoute(builder:(context)=>widget)).then((dynamic dynamicValue)  {
+      homeBloc.add(ModifyCommentsCountEvent(index: index, comments_count: dynamicValue));
+       context.read<ChangeCupertinoTabBar>().toggle();
+    });
+  }
 }

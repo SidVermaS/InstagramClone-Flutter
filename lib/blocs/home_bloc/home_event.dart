@@ -18,3 +18,15 @@ class ModifyFavoriteEvent extends HomeEvent  {
 
   List<Object> get props=>[index];
 }
+
+class ModifyCommentsCountEvent extends HomeEvent  {
+
+  int index, comments_count;
+
+  ModifyCommentsCountEvent({this.index, this.comments_count});
+
+  List<Object> get props=>[index, comments_count];
+
+
+
+}

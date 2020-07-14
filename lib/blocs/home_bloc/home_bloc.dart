@@ -55,6 +55,8 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
         }
       } else if(event is ModifyFavoriteEvent) {
         yield* mapModifyEventToState(event);
+      } else if(event is ModifyCommentsCountEvent) {
+        yield* mapModifyCommentsCountEventToState(event);
       }
   }
 
@@ -84,6 +86,17 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
 
             yield HomeErrorState(message: mapResponse['message'], postsList: postsList);
             
+          }
+        } catch(e)  {
+          yield HomeErrorState(message: e.toString(), postsList:postsList); 
+        }
+  }
+    Stream<HomeState> mapModifyCommentsCountEventToState(ModifyCommentsCountEvent event) async* {
+        
+        try {
+          if(postsList[event.index].comments_count!=event.comments_count) {
+            postsList[event.index].comments_count=event.comments_count;
+            yield HomeMoreLoadedState(postsList: postsList);
           }
         } catch(e)  {
           yield HomeErrorState(message: e.toString(), postsList:postsList); 

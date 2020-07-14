@@ -11,12 +11,13 @@ import 'package:query_params/query_params.dart';
 
 class CommentsBloc extends Bloc<CommentsEvent, CommentsState> {
 
-  CommentsBloc({this.post_id}):super(null);
+  CommentsBloc({this.post_id,this.comments_count}):super(null);
 
   CommentsState get initialState=>CommentsInitialState();
 
   bool notLoading=true;
-  int page=0, post_id;
+
+  int page=0, post_id,comments_count;
   List<Comment> commentsList=List<Comment>(); 
   Map<String, dynamic> bodyMap;
   URLQueryParams queryParams=URLQueryParams();
@@ -35,7 +36,7 @@ class CommentsBloc extends Bloc<CommentsEvent, CommentsState> {
             Map<String, dynamic> mapResponse=jsonDecode(response.body);
     
             if(response.statusCode==200)  {
-              List<dynamic> dynamicList=mapResponse['posts'] as List<dynamic>; 
+              List<dynamic> dynamicList=mapResponse['comments'] as List<dynamic>; 
               
               dynamicList.map((i)=>commentsList.add(Comment.fromJson(i))).toList();
               yield CommentsLoadedState(commentsList: commentsList);
@@ -51,31 +52,7 @@ class CommentsBloc extends Bloc<CommentsEvent, CommentsState> {
         notLoading=true;
         }
     } else if(event is AddCommentEvent) {
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+        yield* mapAddCommentEventToState(event);
 
     } else if(event is DeleteCommentEvent)  {
 
@@ -119,6 +96,7 @@ class CommentsBloc extends Bloc<CommentsEvent, CommentsState> {
   
           if(response.statusCode==200)  {
             commentsList[commentsList.length-1].comment_id=mapResponse['comment']['comment_id'];
+            comments_count++;
           } else  {   
 
             yield CommentsErrorState(message: mapResponse['message'], commentsList: commentsList);
