@@ -5,9 +5,12 @@ import 'package:eventapp/screens/login.dart';
 import 'package:eventapp/screens/register/register_details.dart';
 import 'package:eventapp/screens/register/register_phone.dart';
 import 'package:eventapp/screens/register/register_success.dart';
+import 'package:eventapp/utils/change_cupertino_tab_bar.dart';
 import 'package:eventapp/utils/global.dart';
 import 'package:eventapp/utils/screen.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:load/load.dart';
@@ -16,7 +19,10 @@ import 'blocs/auth_bloc/bloc.dart';
 
 
 
-void main() => runApp( MyApp());
+void main() => runApp(MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => ChangeCupertinoTabBar()),
+      ],child: MyApp()));
 
 class MyApp extends StatelessWidget {
   

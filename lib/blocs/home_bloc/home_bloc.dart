@@ -6,8 +6,7 @@ import 'package:http/http.dart' as http;
 import 'package:bloc/bloc.dart';
 import 'package:query_params/query_params.dart';
 
-import 'package:eventapp/blocs/home_bloc/home_event.dart';
-import 'package:eventapp/blocs/home_bloc/home_state.dart';
+import 'package:eventapp/blocs/home_bloc/bloc.dart';
 import 'package:eventapp/models/post.dart';
 
 class HomeBloc extends Bloc<HomeEvent, HomeState> {
@@ -21,8 +20,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   List<Post> postsList=List<Post>(); 
   Map<String, dynamic> bodyMap;
   URLQueryParams queryParams=URLQueryParams();
-  Stream<HomeState> mapEventToState(HomeEvent event) async* {
-    
+  Stream<HomeState> mapEventToState(HomeEvent event) async* {   
       
       if(event is FetchHomeEvent)  { 
         if(notLoading)  {
@@ -66,6 +64,11 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
           print('1: ${postsList[event.index].status}');
           postsList[event.index].status=postsList[event.index].status=='like'?'remove':'like';
           print('2: ${postsList[event.index].status}');
+         if(postsList[event.index].status=='like')  {
+           postsList[event.index].reactions_count++;
+         }  else  {
+           postsList[event.index].reactions_count--;
+         }
           yield HomeMoreLoadedState(postsList: postsList);
 
           bodyMap=Map<String, dynamic>();

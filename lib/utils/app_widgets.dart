@@ -28,4 +28,7 @@ class AppWidgets  {
    Widget getName(String text) {
     return Text(text, style: TextStyle(color: Colors.black, fontWeight: FontWeight.w700 , fontSize: 15));
   }  
+  Widget getPageTitle(String text)  {
+    return Text(text, style: TextStyle(color: Colors.black, fontWeight: FontWeight.w600 , fontSize: 18));
+  }
 }

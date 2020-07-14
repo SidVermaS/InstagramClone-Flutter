@@ -8,13 +8,18 @@ import 'package:eventapp/screens/main_menu/users.dart';
 import 'package:eventapp/screens/register/register_details.dart';
 import 'package:eventapp/screens/register/register_phone.dart';
 import 'package:eventapp/screens/register/register_success.dart';
+import 'package:eventapp/networks/constant_base_urls.dart';
+import 'package:eventapp/utils/change_cupertino_tab_bar.dart';
 import 'package:eventapp/utils/global.dart';
+import 'package:eventapp/utils/invisible_cupertino_tab_bar.dart';
 import 'package:eventapp/utils/screen.dart';
 
 import 'dart:math' as math;
 
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -25,35 +30,57 @@ class Index extends StatefulWidget{
 class _IndexState extends State<Index>  {
   int _currentIndex=0;
   List<Widget> widgetsList=[BlocProvider(create:(context)=>HomeBloc(), child: Home()), Explore(), AddPost(), Users(), Profile()];
+  
+  void initState()  {
+    super.initState();
+    Future.delayed(Duration.zero, ()  {
+      setState(() {
+        Screen.height=MediaQuery.of(context).size.height;
+        Screen.width=MediaQuery.of(context).size.width;
+      });
+     
+    });
+  }
+  
   Widget build(BuildContext context)  {
     return CupertinoTabScaffold(
       
-      tabBar: CupertinoTabBar(
-      
+      tabBar: context.watch<ChangeCupertinoTabBar>().showCupertinoTabBar?CupertinoTabBar(
+        
+        activeColor: Colors.black,
+        inactiveColor: Colors.black,
         currentIndex: _currentIndex,
         onTap: onTabTapped,
         items: [
           BottomNavigationBarItem(icon: 
-            Icon(Icons.home,),
+            Icon(FontAwesomeIcons.home,),
           ),
             BottomNavigationBarItem(icon: 
             Icon(Icons.search),
           ),
-  BottomNavigationBarItem(icon: 
-            Icon(FontAwesomeIcons.plusSquare),
-          ),
-  BottomNavigationBarItem(icon: 
-            Icon(Icons.favorite),
-          ),
-  BottomNavigationBarItem(icon: 
-            Icon(Icons.add_circle_outline),
-            //  CircleAvatar(backgroundImage: NetworkImage('${ConstantBaseUrls.usersPhotoBaseUrl}${Global.user.photo_url}'),)
-          ),
+            BottomNavigationBarItem(icon: 
+                      Icon(FontAwesomeIcons.plusSquare),
+                    ),
+            BottomNavigationBarItem(icon: 
+                      Icon(Icons.favorite),
+                    ),
+            BottomNavigationBarItem(icon: 
+                      Container(
+                        padding: EdgeInsets.all(2.5),
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          // borderRadius:
+                          border: Border.all(color: _currentIndex==4?Colors.black:Colors.transparent, width: 0.8)
+                        ),
+                        child: CircleAvatar(
+                      backgroundImage: NetworkImage('${ConstantBaseUrls.usersPhotoBaseUrl}${Global.user.photo_url}'),radius: 10.2)),
+                    
+                    ),
 
 
         ],
 
-      ),
+      ):InvisibleCupertinoTabBar(),
       tabBuilder: (BuildContext context, int index) {
         return CupertinoTabView(
           builder:(BuildContext context)  {
@@ -68,25 +95,7 @@ class _IndexState extends State<Index>  {
                 ),
                 debugShowCheckedModeBanner: false,
                 home: CupertinoPageScaffold(
-                  navigationBar: CupertinoNavigationBar(
-                    middle:
-                     Container(
-                       margin: EdgeInsets.fromLTRB(8, 0, 8, 0),                       
-                       child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: <Widget>[ Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: <Widget>[
-                        Icon(FontAwesomeIcons.instagram, color: Colors.black),
-                        SizedBox(width: 5),
-                        Image.asset('assets/images/instagram.png', height: 35,)
-                    ],),
-                    GestureDetector(child: Transform.rotate(angle: 31, child: Icon(Icons.send, color: Colors.black,)), onTap:  ()  {
-
-                    })
-                  ])),
                   
-                  ),
                   resizeToAvoidBottomInset: false,
                   child: widgetsList[_currentIndex] 
                 ),
@@ -99,7 +108,7 @@ class _IndexState extends State<Index>  {
       }
     );
   }
-
+  
 
   void onTabTapped(int index) {
     setState(() {

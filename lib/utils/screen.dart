@@ -10,4 +10,7 @@ class Screen  {
   static void showToast(String text) {
     Toast.show(text, context, duration: Toast.LENGTH_SHORT, gravity:  Toast.BOTTOM);
   }
+  static void navigateToPage(Widget widget)  {
+    Navigator.of(context).push(MaterialPageRoute(builder: (context)=>widget));
+  }
 }

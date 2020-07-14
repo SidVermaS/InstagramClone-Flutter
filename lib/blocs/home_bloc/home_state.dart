@@ -29,7 +29,7 @@ class HomeErrorState extends HomeState  {
 
   String message;
   List<Post> postsList;
-  HomeErrorState({this.message,this.postsList});
+  HomeErrorState({this.message, this.postsList});
 
-  List<Object> get props=>[message,postsList];
+  List<Object> get props=>[message, postsList];
 }

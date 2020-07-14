@@ -12,7 +12,7 @@ class Global  {
   static Connect connect=Connect();
   static Regex regex=Regex();
   static SharedPrefManager sharedPrefManager=SharedPrefManager();
-
+  
   static String currentScreenType = 'home';
 
 

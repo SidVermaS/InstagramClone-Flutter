@@ -1,13 +1,19 @@
+import 'package:eventapp/blocs/comments_bloc/bloc.dart';
 import 'package:eventapp/blocs/home_bloc/bloc.dart';
 import 'package:eventapp/blocs/home_bloc/home_bloc.dart';
 import 'package:eventapp/blocs/home_bloc/home_event.dart';
 import 'package:eventapp/models/post.dart';
 import 'package:eventapp/networks/constant_base_urls.dart';
+import 'package:eventapp/screens/comments.dart';
 import 'package:eventapp/utils/app_widgets.dart';
+import 'package:eventapp/utils/change_cupertino_tab_bar.dart';
 import 'package:eventapp/utils/global.dart';
 import 'package:eventapp/utils/screen.dart';
 import 'package:eventapp/utils/shared_pref_manager.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -26,11 +32,7 @@ class _HomeState extends State<Home>{
     super.initState();
     appWidgets.context=context;
     Screen.context=context;
-
-    Future.delayed(Duration.zero, ()  {
-     Screen.height=MediaQuery.of(context).size.height;
-     Screen.width=MediaQuery.of(context).size.width;
-    });
+  
 
     homeBloc=BlocProvider.of<HomeBloc>(context);
     homeBloc.add(FetchHomeEvent());
@@ -38,15 +40,36 @@ class _HomeState extends State<Home>{
 
 
   Widget build(BuildContext context)  {
-    return Scaffold(
-      body: Container(
+    return CupertinoPageScaffold(
+      navigationBar: CupertinoNavigationBar(
+        middle:
+          Container(
+            margin: EdgeInsets.fromLTRB(8, 0, 8, 0),                       
+            child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: <Widget>[ Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: <Widget>[
+            Icon(FontAwesomeIcons.instagram, color: Colors.black),
+            SizedBox(width: 5),
+            Image.asset('assets/images/instagram.png', height: 35,)
+        ],),
+        GestureDetector(child: Transform.rotate(angle: 31, child: Icon(Icons.send, color: Colors.black,)), onTap:  ()  {
+
+        })
+      ])),
+      
+      ),
+      child: Container(
+        padding: EdgeInsets.fromLTRB(0, 0, 0, 40),
         child: BlocListener<HomeBloc, HomeState>  (
           listener: (BuildContext context, HomeState state) {
             if(state is HomeErrorState)  {
               Screen.showToast(state.message);
             }
           },
-          child: BlocBuilder<HomeBloc, HomeState> (builder: (context, state)  {
+          child: BlocBuilder<HomeBloc, HomeState> (
+            builder: (context, state)  {
              print('3: ${state.toString()}');
             if(state is HomeInitialState) {
               return loadShimmer();
@@ -113,7 +136,10 @@ class _HomeState extends State<Home>{
           children: <Widget>[
            Container(
              margin: EdgeInsets.fromLTRB(12, 10, 13, 10),
-             child: Row(
+             child:Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                 Expanded(child: Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: <Widget>[
                  CircleAvatar(
@@ -121,6 +147,11 @@ class _HomeState extends State<Home>{
             SizedBox(width: 11.5),
             appWidgets.getName(postsList[index].user.name)
             ],)),
+            GestureDetector(behavior: HitTestBehavior.translucent, child:  Icon(Icons.more_vert, color: Colors.black), onTap: () {
+              
+            },),
+            
+            ])),
             Container(
               width:Screen.width,
               height: Screen.height-(Screen.height*0.55),
@@ -138,8 +169,11 @@ class _HomeState extends State<Home>{
                   //  :'assets/images/fav_outline.jpg'
                  }, child:postsList[index].status=='like'?Icon(Icons.favorite, size: 30, color: Colors.red):Icon(Icons.favorite_border, size: 30, color: Colors.black)),
                  SizedBox(width: 17.0),
-                GestureDetector(onTap:()  {
-
+                GestureDetector(
+                  behavior: HitTestBehavior.translucent,
+                  onTap:()  {
+                   context.read<ChangeCupertinoTabBar>().toggle();
+                  Screen.navigateToPage(BlocProvider(create:(context)=>CommentsBloc(post_id: postsList[index].post_id), child: Comments(post: postsList[index],)));
                 }, child: Container(transform: Matrix4.translationValues(0,-1.5,0),child: Icon(FontAwesomeIcons.comment, size: 25, color: Colors.black)))
                 ]),
                 Icon(Icons.file_download, color: Colors.black, size: 30),
@@ -163,4 +197,5 @@ class _HomeState extends State<Home>{
           ]));
     });
   }
+  
 }
