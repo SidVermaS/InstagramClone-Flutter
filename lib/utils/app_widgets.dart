@@ -21,6 +21,9 @@ class AppWidgets  {
       ),
     ));
   }
+  Widget getCircularProgressIndicator()  {
+    return Center(child: CircularProgressIndicator(valueColor:  AlwaysStoppedAnimation<Color>(Colors.grey),));
+  }
 
   Widget getSmallFadedText(String text) {
     return Text(text, style: TextStyle(color: Colors.grey, fontSize: 12, fontWeight: FontWeight.w600));

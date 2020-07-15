@@ -3,7 +3,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:eventapp/models/comment.dart';
 
-abstract class CommentsEvent extends Equatable  {
+abstract class CommentsEvent  {
 
 
 }
@@ -17,11 +17,11 @@ class FetchCommentsEvent extends CommentsEvent  {
 }
 
 class AddCommentEvent extends CommentsEvent { 
-  Comment comment;
+  String comment_text;
 
-  AddCommentEvent({this.comment});
+  AddCommentEvent({this.comment_text});
 
-  List<Object> get props=>[comment];
+  List<Object> get props=>[comment_text];
 }
 
 class DeleteCommentEvent extends CommentsEvent {

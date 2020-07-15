@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:eventapp/blocs/comments_bloc/bloc.dart';
@@ -7,20 +8,30 @@ import 'package:eventapp/utils/global.dart';
 import 'package:http/http.dart' as http;
 import 'package:bloc/bloc.dart';
 import 'package:query_params/query_params.dart';
+import 'package:rxdart/rxdart.dart';
 
 
 class CommentsBloc extends Bloc<CommentsEvent, CommentsState> {
-
-  CommentsBloc({this.post_id,this.comments_count}):super(null);
+  
+  CommentsBloc({this.comment,this.post_id,this.comments_count}):super(null);
 
   CommentsState get initialState=>CommentsInitialState();
+
+  final BehaviorSubject<String> commentBehaviorSubject=BehaviorSubject<String>();
+  Stream<String> get commentStream=>commentBehaviorSubject.stream;
+  StreamSink<String> get commentStreamSink=>commentBehaviorSubject.sink;
 
   bool notLoading=true;
 
   int page=-1, post_id,comments_count;
+  Comment comment;
   List<Comment> commentsList=List<Comment>(); 
   Map<String, dynamic> bodyMap;
   URLQueryParams queryParams=URLQueryParams();
+
+  void dispose()  {
+    commentBehaviorSubject.close();
+  }
 
   Stream<CommentsState> mapEventToState(CommentsEvent event) async* {
 
@@ -40,8 +51,11 @@ class CommentsBloc extends Bloc<CommentsEvent, CommentsState> {
               List<dynamic> dynamicList=mapResponse['comments'] as List<dynamic>; 
               
               dynamicList.map((i)=>commentsList.add(Comment.fromJson(i))).toList();
+              if(dynamicList.length==0) {
+                page--;
+              }
               yield CommentsLoadedState(commentsList: commentsList, isLoadingMore: false);
-              
+             
             } else  {     
               page--;     
               yield CommentsErrorState(message: mapResponse['message'], commentsList: commentsList);
@@ -62,51 +76,35 @@ class CommentsBloc extends Bloc<CommentsEvent, CommentsState> {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     }
   }
     Stream<CommentsState> mapAddCommentEventToState(AddCommentEvent event) async* {
         
         try {
-          commentsList.add(event.comment);
-          yield CommentsLoadedState(commentsList: commentsList);
+          comment.comment_text=event.comment_text;
+          commentStreamSink.add('');
+          commentsList.insert(0, comment);
+             print('~~~  1 comment_text: ${commentsList[0].comment_text}');
+          yield CommentsLoadedState(commentsList: commentsList, isLoadingMore: false);
 
-          bodyMap=event.comment.toJsonAdd();
+          bodyMap=comment.toJsonAdd();
 
           http.Response response=await Global.connect.sendPost('${ConstantSubUrls.comment}', bodyMap);
           Map<String, dynamic> mapResponse=jsonDecode(response.body);
   
-          if(response.statusCode==200)  {
-            commentsList[commentsList.length-1].comment_id=mapResponse['comment']['comment_id'];
+          if(response.statusCode==201)  {
+            commentsList[0].comment_id=mapResponse['comment']['comment_id'];
             comments_count++;
           } else  {   
 
             yield CommentsErrorState(message: mapResponse['message'], commentsList: commentsList);
-            commentsList.removeLast();            
+            commentsList.removeAt(0);            
           }
-          yield CommentsLoadedState(commentsList: commentsList);
         } catch(e)  {
           yield CommentsErrorState(message: e.toString(), commentsList:commentsList); 
+          commentsList.removeAt(0);  
         }
+           print('~~~ 3 comment_text: ${commentsList[0].comment_text}');
+        yield CommentsLoadedState(commentsList: commentsList, isLoadingMore: false);
   }
 }
