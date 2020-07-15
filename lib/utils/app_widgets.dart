@@ -4,6 +4,10 @@ import 'package:flutter/material.dart';
 class AppWidgets  {
   BuildContext context;
 
+  Future<dynamic> navigateAndRefresh(Widget widget) async {
+    return await Navigator.of(context).push(MaterialPageRoute(builder:(context)=>widget));
+  }
+
   Widget getRaisedButton(VoidCallback voidCallback, String text)  {
     return ButtonTheme(
       height: 50,
@@ -31,4 +35,5 @@ class AppWidgets  {
   Widget getPageTitle(String text)  {
     return Text(text, style: TextStyle(color: Colors.black, fontWeight: FontWeight.w600 , fontSize: 18));
   }
+
 }

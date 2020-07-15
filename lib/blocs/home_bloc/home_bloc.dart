@@ -16,7 +16,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   HomeState get initialState=>HomeInitialState(); 
 
   bool notLoading=true;
-  int page=0, user_id=Global.user.user_id;
+  int page=-1, user_id=Global.user.user_id;
   List<Post> postsList=List<Post>(); 
   Map<String, dynamic> bodyMap;
   URLQueryParams queryParams=URLQueryParams();
@@ -26,7 +26,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
         if(notLoading)  {
           notLoading=false;
           try {
-          
+            page++;
             queryParams=URLQueryParams();
             queryParams.append('page', page);
             queryParams.append('user_id', user_id);

@@ -37,7 +37,10 @@ class _HomeState extends State<Home>{
     homeBloc=BlocProvider.of<HomeBloc>(context);
     homeBloc.add(FetchHomeEvent());
   }
-
+  void dispose()  {
+    super.dispose();
+    homeBloc.close();
+  }
 
   Widget build(BuildContext context)  {
     return CupertinoPageScaffold(
@@ -171,9 +174,8 @@ class _HomeState extends State<Home>{
                  SizedBox(width: 17.0),
                 GestureDetector(
                   behavior: HitTestBehavior.translucent,
-                  onTap:()  {
-                  
-                  navigateAndRefresh(BlocProvider(create:(context)=>CommentsBloc(post_id: postsList[index].post_id, comments_count: postsList[index].comments_count), child: Comments(post: postsList[index],)), index);
+                  onTap:()  {                  
+                    navigateAndRefresh(BlocProvider(create:(context)=>CommentsBloc(post_id: postsList[index].post_id, comments_count: postsList[index].comments_count), child: Comments(post: postsList[index],)), index);
                 }, child: Container(transform: Matrix4.translationValues(0,-1.5,0),child: Icon(FontAwesomeIcons.comment, size: 25, color: Colors.black)))
                 ]),
                 Icon(Icons.file_download, color: Colors.black, size: 30),
@@ -191,17 +193,20 @@ class _HomeState extends State<Home>{
             TextSpan(text: postsList[index].caption, style: TextStyle(color: Colors.black87, fontSize: 15,fontWeight: FontWeight.normal)),
 
             ]))),
-            postsList[index].comments_count>0?Text('View all ${postsList[index].comments_count} comments', style: TextStyle(color: Colors.black45, fontSize: 15,fontWeight: FontWeight.w400)):SizedBox(width: 0,height: 0,)
+            postsList[index].comments_count>0? GestureDetector(
+                  behavior: HitTestBehavior.translucent,
+                  onTap:()  {                  
+                    navigateAndRefresh(BlocProvider(create:(context)=>CommentsBloc(post_id: postsList[index].post_id, comments_count: postsList[index].comments_count), child: Comments(post: postsList[index],)), index);
+                }, child: Text('View all ${postsList[index].comments_count} comments', style: TextStyle(color: Colors.black45, fontSize: 15,fontWeight: FontWeight.w400))):SizedBox(width: 0,height: 0,)
             
             ]))
           ]));
     });
   }
   void navigateAndRefresh(Widget widget, int index) async {
-     context.read<ChangeCupertinoTabBar>().toggle();
-    Navigator.of(context).push(MaterialPageRoute(builder:(context)=>widget)).then((dynamic dynamicValue)  {
-      homeBloc.add(ModifyCommentsCountEvent(index: index, comments_count: dynamicValue));
-       context.read<ChangeCupertinoTabBar>().toggle();
-    });
+    context.read<ChangeCupertinoTabBar>().toggle();
+    int dynamicValue=await appWidgets.navigateAndRefresh(widget);
+    ModifyCommentsCountEvent(index: index, comments_count: dynamicValue);
+    context.read<ChangeCupertinoTabBar>().toggle();
   }
 }

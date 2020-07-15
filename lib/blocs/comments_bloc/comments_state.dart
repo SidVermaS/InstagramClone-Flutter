@@ -16,10 +16,10 @@ class CommentsInitialState extends CommentsState {
 class CommentsLoadedState extends CommentsState {
 
   List<Comment> commentsList;
+  bool isLoadingMore;
+  CommentsLoadedState({this.commentsList, this.isLoadingMore});
 
-  CommentsLoadedState({this.commentsList});
-
-  List<Object> get props=>[commentsList];
+  List<Object> get props=>[commentsList, isLoadingMore];
 
 }
 

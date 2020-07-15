@@ -17,7 +17,7 @@ class CommentsBloc extends Bloc<CommentsEvent, CommentsState> {
 
   bool notLoading=true;
 
-  int page=0, post_id,comments_count;
+  int page=-1, post_id,comments_count;
   List<Comment> commentsList=List<Comment>(); 
   Map<String, dynamic> bodyMap;
   URLQueryParams queryParams=URLQueryParams();
@@ -28,7 +28,8 @@ class CommentsBloc extends Bloc<CommentsEvent, CommentsState> {
       if(notLoading)  {
           notLoading=false;
           try {
-          
+            yield CommentsLoadedState(commentsList: commentsList, isLoadingMore: true);
+            page++;
             queryParams=URLQueryParams();
             queryParams.append('page', page);
             queryParams.append('post_id', post_id);
@@ -39,7 +40,8 @@ class CommentsBloc extends Bloc<CommentsEvent, CommentsState> {
               List<dynamic> dynamicList=mapResponse['comments'] as List<dynamic>; 
               
               dynamicList.map((i)=>commentsList.add(Comment.fromJson(i))).toList();
-              yield CommentsLoadedState(commentsList: commentsList);
+              yield CommentsLoadedState(commentsList: commentsList, isLoadingMore: false);
+              
             } else  {     
               page--;     
               yield CommentsErrorState(message: mapResponse['message'], commentsList: commentsList);
