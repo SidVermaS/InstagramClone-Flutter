@@ -35,7 +35,7 @@ class _UsersState extends State<Users>{
   Widget build(BuildContext context)  {
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
-        middle:Row(mainAxisAlignment: MainAxisAlignment.start, children:<Widget>[Text('Users')]),
+        middle:Container(margin: EdgeInsets.only(left: 8), child: Row(mainAxisAlignment: MainAxisAlignment.start, children:<Widget>[appWidgets.getPageTitle('Users')])),
       
       ),
       child: Container(

@@ -47,7 +47,8 @@ class UsersWidget {
             Text(usersList[index].name, style: TextStyle(color: Colors.black, fontWeight: FontWeight.w500 , fontSize: 15))
             ],)),
             ButtonTheme(
-              height: 20,
+              height: 27.5,
+              minWidth: 70,
               buttonColor: Screen.eventBlue,
               child: RaisedButton(shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)), onPressed: () {}, child: Text('View', style: TextStyle(color: Colors.white)))
             )

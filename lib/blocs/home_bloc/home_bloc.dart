@@ -36,7 +36,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
             if(response.statusCode==200)  {
               List<dynamic> dynamicList=mapResponse['posts'] as List<dynamic>; 
               
-              dynamicList.map((i)=>postsList.add(Post.fromJson(i))).toList();
+              dynamicList.map((i)=>postsList.add(Post.fromJsonHome(i))).toList();
               if(dynamicList.length==0) {
                 page--;
               }
