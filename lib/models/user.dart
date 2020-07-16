@@ -18,7 +18,7 @@ class User  {
       photo_url=map['photo_url'];
       token="bearer ${map['token']}";
     }
-      User.fromJsonComment(Map<String, dynamic> map) {
+    User.fromJson(Map<String, dynamic> map) {
       user_id=map['user_id'];
       name=map['name'];
       photo_url=map['photo_url'];

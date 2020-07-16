@@ -1,4 +1,5 @@
 import 'package:eventapp/blocs/home_bloc/home_bloc.dart';
+import 'package:eventapp/blocs/users_bloc/bloc.dart';
 import 'package:eventapp/screens/login.dart';
 import 'package:eventapp/screens/main_menu/add_post.dart';
 import 'package:eventapp/screens/main_menu/explore.dart';
@@ -29,7 +30,7 @@ class Index extends StatefulWidget{
 
 class _IndexState extends State<Index>  {
   int _currentIndex=0;
-  List<Widget> widgetsList=[BlocProvider(create:(context)=>HomeBloc(), child: Home()), Explore(), AddPost(), Users(), Profile()];
+  List<Widget> widgetsList=[BlocProvider(create:(context)=>HomeBloc(), child: Home()), Explore(), AddPost(), BlocProvider(create:(context)=>UsersBloc(),child: Users()), Profile()];
   
   void initState()  {
     super.initState();
@@ -108,6 +109,7 @@ class _IndexState extends State<Index>  {
       }
     );
   }
+  
   
 
   void onTabTapped(int index) {

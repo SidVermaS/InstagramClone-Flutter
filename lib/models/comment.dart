@@ -10,7 +10,7 @@ class Comment {
 
   Comment.fromJson(Map<String, dynamic> map) {
     post_id=map['post_id'];
-    user=User.fromJsonComment(map['user']);
+    user=User.fromJson(map['user']);
     comment_id=map['comment_id'];
     comment_text=map['comment_text'];
   }
