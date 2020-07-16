@@ -26,6 +26,8 @@ class User  {
      User.fromJsonProfile(Map<String, dynamic> map) {
       user_id=map['user_id'];
       name=map['name'];
+      role=map['role'];
+      mobile_no=map['mobile_no'].toString();
       photo_url=map['photo_url'];
       posts_count=map['posts_count'];
       reactions_count=map['reactions_count'];

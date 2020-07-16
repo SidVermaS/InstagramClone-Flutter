@@ -31,7 +31,7 @@ class Index extends StatefulWidget{
 
 class _IndexState extends State<Index>  {
   int _currentIndex=0;
-  List<Widget> widgetsList=[BlocProvider(create:(context)=>HomeBloc(), child: Home()), Explore(), AddPost(), BlocProvider(create:(context)=>UsersBloc(),child: Users()), BlocProvider(create: (context)=>ProfileBloc(user: Global.user.getUserDetails()), child: Profile())];
+  List<Widget> widgetsList=[BlocProvider(create:(context)=>HomeBloc(), child: Home()), Explore(), AddPost(), BlocProvider(create:(context)=>UsersBloc(),child: Users()), BlocProvider(create: (context)=>ProfileBloc(user: Global.user.getUserDetails()), child: Profile(user: Global.user.getUserDetails()))];
   
   void initState()  {
     super.initState();

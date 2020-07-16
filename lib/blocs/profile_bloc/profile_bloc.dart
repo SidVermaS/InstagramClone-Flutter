@@ -22,12 +22,14 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState>  {
   URLQueryParams queryParams=URLQueryParams();
 
   Stream<ProfileState> mapEventToState(ProfileEvent event) async* {
+   
     if(event is FetchPostsEvent)  {
       if(notLoading)  {
           notLoading=false;
           try {
             page++;
-             queryParams.append('page', page);
+             queryParams.append('page', page); 
+             queryParams.append('user_id', user.user_id);
             http.Response response=await Global.connect.sendGet('${ConstantSubUrls.post}${ConstantSubUrls.user}?${queryParams.toString()}');
             Map<String, dynamic> mapResponse=jsonDecode(response.body);
 
@@ -40,15 +42,15 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState>  {
               }
             } else  {     
               page--;     
-              yield PostsErrorState(message: mapResponse['message'], postsList: postsList);              
+              yield ProfileErrorState(message: mapResponse['message'], postsList: postsList, user: user);              
             }
              } catch(e)  {
           page--;
-          yield PostsErrorState(message: e.toString(), postsList: postsList); 
+          yield ProfileErrorState(message: e.toString(), postsList: postsList, user: user); 
         }
         notLoading=true;        
       }
-      yield PostsLoadedState(postsList: postsList);
+      yield ProfileLoadedState(postsList: postsList, user: user);
     }
     else if(event is FetchProfileEvent) {
       yield* mapProfileEventToState(event); 
@@ -57,30 +59,18 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState>  {
 
   Stream<ProfileState> mapProfileEventToState(ProfileEvent event) async*  {
     try {
-      http.Response response=await Global.connect.sendGet('${ConstantSubUrls.user}?${user.user_id}');
+      http.Response response=await Global.connect.sendGet('${ConstantSubUrls.user}${user.user_id}');
       Map<String, dynamic> mapResponse=jsonDecode(response.body);
       if(response.statusCode==200)  {
-        user=User.fromJsonProfile(mapResponse['user']);    
+         print('~~~ 1 mes: ${(mapResponse['user'])}'); 
+        user=User.fromJsonProfile(mapResponse['user']);   
+         print('~~~ 2 mes: ${user.toJsonGlobal()} rc: ${user.reactions_count}'); 
       } else  {      
-        yield ProfileErrorState(message: mapResponse['message'], user: user);              
+        yield ProfileErrorState(message: mapResponse['message'], user: user, postsList: postsList);              
       }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     } catch(e)  {
-      yield ProfileErrorState(message: e.toString(), user: user); 
+      yield ProfileErrorState(message: e.toString(), user: user, postsList: postsList); 
     }
+    yield ProfileLoadedState(user: user, postsList: postsList);
   }
 }

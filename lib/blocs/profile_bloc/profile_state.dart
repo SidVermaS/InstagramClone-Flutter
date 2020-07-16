@@ -12,36 +12,22 @@ class ProfileInitialState extends ProfileState  {
 }
 
 class ProfileLoadedState extends ProfileState {
+   List<Post> postsList;
   User user;
-  ProfileLoadedState({this.user});
-  List<Object> get props=>[user];
+  ProfileLoadedState({this.user,this.postsList});
+  List<Object> get props=>[user,postsList];
 }
 
 class ProfileErrorState extends ProfileState  {
+  List<Post> postsList;
   User user;
-  ProfileErrorState({this.user, this.message});
+  ProfileErrorState({this.user,this.postsList, this.message});
   String message;
 
-  List<Object> get props=>[user, message];
+  List<Object> get props=>[user,postsList, message];
 }
 
-class PostsInitialState extends ProfileState  {
-  List<Object> get props=>[];
-}
 
-class PostsLoadedState extends ProfileState {
-  List<Post> postsList;
-  PostsLoadedState({this.postsList});
-  List<Object> get props=>[postsList];
-}
-
-class PostsErrorState extends ProfileState  {
-  List<Post> postsList;
-  PostsErrorState({this.postsList, this.message});
-  String message;
-
-  List<Object> get props=>[postsList, message];
-}
 
 
 
