@@ -53,6 +53,7 @@ class _CommentsState extends State<Comments>  {
 
     return MaterialApp(
         debugShowCheckedModeBanner: false,
+         theme: _appWidgets.getThemeData(),
         home: WillPopScope(
       onWillPop: _onWillPop,
       child: Scaffold(
@@ -189,7 +190,6 @@ class _CommentsState extends State<Comments>  {
 
 
      Widget _loadComments(List<Comment> commentsList)  {
-         print('~~~ 2 CommentsLoadedState: ${commentsList[0].comment_text}');
       return ListView.builder(
                     physics: const NeverScrollableScrollPhysics(),
                       shrinkWrap: true,
@@ -201,7 +201,7 @@ class _CommentsState extends State<Comments>  {
                             Flexible(flex: 1,child: Container(margin: EdgeInsets.only(right: 10), child: CircleAvatar(
               backgroundImage: NetworkImage('${ConstantBaseUrls.photosPhotoBaseUrl}${commentsList[index].user.photo_url}'),radius: 15.0))),
                             Flexible(flex: 5,child:  RichText(text: TextSpan(text: '${commentsList[index].user.name} ', style: TextStyle(color: Colors.black, fontSize: 15, fontWeight: FontWeight.bold), children:<TextSpan>[
-              TextSpan(text: post.caption, style: TextStyle(color: Colors.black87, fontSize: 15,fontWeight: FontWeight.normal)),
+              TextSpan(text: commentsList[index].comment_text, style: TextStyle(color: Colors.black87, fontSize: 15,fontWeight: FontWeight.normal)),
   
               ])),),
                     

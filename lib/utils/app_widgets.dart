@@ -7,7 +7,12 @@ class AppWidgets  {
   Future<dynamic> navigateAndRefresh(Widget widget) async {
     return await Navigator.of(context).push(MaterialPageRoute(builder:(context)=>widget));
   }
-
+  ThemeData getThemeData()  {
+    return ThemeData(
+        primaryColor: Screen.eventGrey,
+        primaryColorDark: Screen.eventBlue
+      );
+  }
   Widget getRaisedButton(VoidCallback voidCallback, String text)  {
     return ButtonTheme(
       height: 50,

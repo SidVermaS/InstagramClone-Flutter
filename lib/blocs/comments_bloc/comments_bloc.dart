@@ -84,7 +84,6 @@ class CommentsBloc extends Bloc<CommentsEvent, CommentsState> {
           comment.comment_text=event.comment_text;
           commentStreamSink.add('');
           commentsList.insert(0, comment);
-             print('~~~  1 comment_text: ${commentsList[0].comment_text}');
           yield CommentsLoadedState(commentsList: commentsList, isLoadingMore: false);
 
           bodyMap=comment.toJsonAdd();
@@ -104,7 +103,6 @@ class CommentsBloc extends Bloc<CommentsEvent, CommentsState> {
           yield CommentsErrorState(message: e.toString(), commentsList:commentsList); 
           commentsList.removeAt(0);  
         }
-           print('~~~ 3 comment_text: ${commentsList[0].comment_text}');
         yield CommentsLoadedState(commentsList: commentsList, isLoadingMore: false);
   }
 }
