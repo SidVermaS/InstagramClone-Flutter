@@ -12,16 +12,19 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class Profile extends StatefulWidget {
   User user;
-  Profile({this.user});
-  _ProfileState createState()=>_ProfileState(user: user);
+  bool showBackButton;
+  Profile({this.user,this.showBackButton=true});
+  _ProfileState createState()=>_ProfileState(user: user, showBackButton: showBackButton);
 }
 
 class _ProfileState extends State<Profile>{
     User user;
-  _ProfileState({this.user});
+      bool showBackButton;
+  _ProfileState({this.user,this.showBackButton});
 
   AppWidgets appWidgets=AppWidgets();
   ProfileBloc profileBloc;
@@ -41,11 +44,20 @@ class _ProfileState extends State<Profile>{
     super.dispose();
     profileBloc.close();
   }
+  Future<bool> _onWillPop() async  {
 
+    return true;
+  }
   Widget build(BuildContext context)  {
-    return CupertinoPageScaffold(
+    return WillPopScope(onWillPop: _onWillPop, child: CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
-        middle:Container(margin: EdgeInsets.only(left: 8), child: Row(mainAxisAlignment: MainAxisAlignment.start, children:<Widget>[appWidgets.getPageTitle(user.name)])),
+        
+        leading: showBackButton?GestureDetector(behavior: HitTestBehavior.translucent, onTap: ()  {
+          _onWillPop();
+        }, child: Icon(Icons.arrow_back, color: Colors.black)):SizedBox(width: 0, height: 0),
+        middle:Container(margin: EdgeInsets.only(left: 8), child: Row(mainAxisAlignment: MainAxisAlignment.start, children:<Widget>[
+          
+          appWidgets.getPageTitle(user.name)])),
       
       ),
       child: Container(
@@ -83,7 +95,7 @@ class _ProfileState extends State<Profile>{
           }),
         )
      ]))
-    );
+    ));
   }
   
   Widget loadPosts(List<Post> postsList)  {
@@ -92,17 +104,29 @@ class _ProfileState extends State<Profile>{
       physics: const NeverScrollableScrollPhysics(),
       children: <Widget>[
         Container(
-          transform: Matrix4.translationValues(0,-20,0),
-          padding: EdgeInsets.fromLTRB(0, 10, 0, 10), 
+          transform: Matrix4.translationValues(0,-30,0),
+          padding: EdgeInsets.fromLTRB(0, 8, 0, 8), 
           decoration: BoxDecoration(
-            border: Border.all(color: Colors.grey[400])
+            border: Border.all(color: Colors.grey[300])
           ),
-    child: Center(child: Icon(Icons.grid_on, color: Colors.grey, size: 30))
+          child: Center(child: Icon(Icons.grid_on, color: Colors.grey, size: 30))
         ),
+        Container(
+          transform: Matrix4.translationValues(0,-30,0),
+          child: GridView.builder(
+          shrinkWrap: true,
+             physics: const NeverScrollableScrollPhysics(),
+          itemCount: postsList.length,
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3, mainAxisSpacing: 1.5, crossAxisSpacing: 1.5),
+          itemBuilder: (BuildContext context, int index)  {
+            return GridTile(
+              
+              child: Container(child: Image.network('${ConstantBaseUrls.photosPhotoBaseUrl}${postsList[index].photo_url}', fit: BoxFit.cover))
 
-
-
-      ],
+            );
+          }
+        )),
+      ],  
     );
   }
   Widget loadProfile(User user) {
@@ -138,7 +162,7 @@ class _ProfileState extends State<Profile>{
         children: <Widget>[    
           loadCounts(user.posts_count, 'Posts'),
           SizedBox(width: 15),
-          loadCounts(user.reactions_count, 'Reactions'),
+          loadCounts(user.reactions_count, 'Reacts'),
         ]))
       ],),
       SizedBox(height: 15),
@@ -147,7 +171,7 @@ class _ProfileState extends State<Profile>{
       Container(margin: EdgeInsets.fromLTRB(0,10,0,0), child: ButtonTheme(shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),minWidth: double.infinity, height: 28, child: Global.user.user_id==user.user_id?OutlineButton(color: Colors.white, child: Text('Edit Profile',style: TextStyle(color: Colors.black,)), onPressed: ()  {
 
       }):RaisedButton(color: Screen.eventBlue, child: Text('Call',style: TextStyle(color: Colors.white,)), onPressed: ()  {
-
+        _launchURL(user.mobile_no);
       }))),
     
         
@@ -164,4 +188,12 @@ class _ProfileState extends State<Profile>{
 
     ]);
   }
+  Future<void> _launchURL(String mobileNo) async {
+  String url = 'tel:$mobileNo';
+  if (await canLaunch(url)) {
+    await launch(url);
+  } else {
+    Screen.showToast('Could not launch $url');
+  }
+}
 }

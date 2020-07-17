@@ -1,4 +1,7 @@
+import 'package:eventapp/blocs/profile_bloc/bloc.dart';
 import 'package:eventapp/blocs/users_bloc/bloc.dart';
+import 'package:eventapp/models/user.dart';
+import 'package:eventapp/screens/main_menu/profile.dart';
 import 'package:eventapp/utils/app_widgets.dart';
 import 'package:eventapp/utils/screen.dart';
 import 'package:eventapp/utils/users_widgets.dart';
@@ -67,11 +70,7 @@ class _UsersState extends State<Users>{
     );
   }
 
-
-
-
-
-
+  
 
 
 

@@ -1,3 +1,4 @@
+import 'package:eventapp/blocs/explore_bloc/bloc.dart';
 import 'package:eventapp/blocs/home_bloc/home_bloc.dart';
 import 'package:eventapp/blocs/profile_bloc/bloc.dart';
 import 'package:eventapp/blocs/users_bloc/bloc.dart';
@@ -31,7 +32,7 @@ class Index extends StatefulWidget{
 
 class _IndexState extends State<Index>  {
   int _currentIndex=0;
-  List<Widget> widgetsList=[BlocProvider(create:(context)=>HomeBloc(), child: Home()), Explore(), AddPost(), BlocProvider(create:(context)=>UsersBloc(),child: Users()), BlocProvider(create: (context)=>ProfileBloc(user: Global.user.getUserDetails()), child: Profile(user: Global.user.getUserDetails()))];
+  List<Widget> widgetsList=[BlocProvider(create:(context)=>HomeBloc(), child: Home()), BlocProvider(create:(context)=>ExploreBloc(), child: Explore()), AddPost(), BlocProvider(create:(context)=>UsersBloc(),child: Users()), BlocProvider(create: (context)=>ProfileBloc(user: Global.user.getUserDetails()), child: Profile(user: Global.user.getUserDetails(), showBackButton: false,))];
   
   void initState()  {
     super.initState();

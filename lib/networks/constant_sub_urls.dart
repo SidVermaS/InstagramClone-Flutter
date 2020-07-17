@@ -8,6 +8,6 @@ class ConstantSubUrls {
       comment='comment/',
       download='download/',
       upload='upload/',
-      customer2='customer/',
+      explore='explore/',
       societies6='societies/';
 }

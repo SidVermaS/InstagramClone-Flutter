@@ -17,7 +17,6 @@ class Post  {
 
    Post.fromJson(Map<String, dynamic> map) {
     post_id=map['post_id'];
-    caption=map['caption'];
     photo_url=map['photo_url'];
   }
 

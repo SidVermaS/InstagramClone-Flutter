@@ -1,7 +1,10 @@
+import 'package:eventapp/blocs/profile_bloc/bloc.dart';
 import 'package:eventapp/models/user.dart';
 import 'package:eventapp/networks/constant_base_urls.dart';
+import 'package:eventapp/screens/main_menu/profile.dart';
 import 'package:eventapp/utils/screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shimmer/shimmer.dart';
 
 class UsersWidget {
@@ -38,23 +41,30 @@ class UsersWidget {
           child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
-                 Expanded(child: Row(
+                 Expanded(child: GestureDetector(onTap: () {
+                   navigateToUser(usersList[index]);
+                 }, child: Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: <Widget>[
                  CircleAvatar(
             backgroundImage: NetworkImage('${ConstantBaseUrls.photosPhotoBaseUrl}${usersList[index].photo_url}'),radius: 28.0),
             SizedBox(width: 11.5),
             Text(usersList[index].name, style: TextStyle(color: Colors.black, fontWeight: FontWeight.w500 , fontSize: 15))
-            ],)),
+            ],))),
             ButtonTheme(
               height: 27.5,
               minWidth: 70,
               buttonColor: Screen.eventBlue,
-              child: RaisedButton(shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)), onPressed: () {}, child: Text('View', style: TextStyle(color: Colors.white)))
+              child: RaisedButton(shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)), onPressed: () {
+                 navigateToUser(usersList[index]);
+              }, child: Text('View', style: TextStyle(color: Colors.white)))
             )
           ])
         );
       }
     );
+  }
+  void navigateToUser(User user)  {
+    Navigator.of(context).push(MaterialPageRoute(builder:(context)=>BlocProvider(create: (context)=>ProfileBloc(user: user.getUserDetails()), child: Profile(user: user.getUserDetails()))));
   }
 }
