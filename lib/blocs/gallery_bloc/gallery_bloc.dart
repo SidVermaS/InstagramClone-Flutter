@@ -16,22 +16,44 @@ class GalleryBloc extends Bloc<GalleryEvent, GalleryState>  {
 
   GalleryState get initialState=>GalleryInitialState();
 
-  int index=0;
-  List<Object> imagesList=List<Object>();
+  int index=0, page=-18, limit=18;
+  List uriList=List(),imagesList=List();
 
   Stream<GalleryState> mapEventToState(GalleryEvent event) async* {
     if(event is FetchGalleryEvent)  {
       try {
-        index=event.index;
-        print('~~~ imagesList: ${imagesList.length} ');
-        imagesList = await FlutterGallaryPlugin.getAllImages;
-          print('~~~ imagesList: ${imagesList.length} ');
-        yield GalleryLoadedState(imagesList: imagesList, index: index);
+        Map<dynamic, dynamic>  allImageTemp= await FlutterGallaryPlugin.getAllImages;
+        uriList=allImageTemp['URIList'] as List;
+        uriList.reversed.toList();
+
+        yield* mapMoreGalleryEventToState(event);
       }
       catch(e)  {
-           print('~~~ err: imagesList: ${e.toString()} ');
         yield GalleryErrorState(message: e.toString(), imagesList:imagesList, index: index); 
       }
+    } else if(event is FetchMoreGalleryEvent) {
+      
+        yield* mapMoreGalleryEventToState(event);
+     
+    } else if(event is SelectGalleryEvent) {
+        try {
+          index=event.index;
+          yield GalleryLoadedState(imagesList: imagesList, index: index);
+      }
+      catch(e)  {
+        yield GalleryErrorState(message: e.toString(), imagesList:imagesList, index: index); 
+      } 
+    }
+  }
+
+  Stream<GalleryState> mapMoreGalleryEventToState(GalleryEvent event) async*  {
+    try {
+      page+=18;
+      imagesList=uriList.sublist(page,limit);
+      yield GalleryLoadedState(imagesList: imagesList, index: index);
+    }
+    catch(e)  {
+      yield GalleryErrorState(message: e.toString(), imagesList:imagesList, index: index); 
     }
   }
 }

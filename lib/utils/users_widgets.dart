@@ -47,7 +47,7 @@ class UsersWidget {
               mainAxisAlignment: MainAxisAlignment.start,
               children: <Widget>[
                  CircleAvatar(
-            backgroundImage: NetworkImage('${ConstantBaseUrls.photosPhotoBaseUrl}${usersList[index].photo_url}'),radius: 28.0),
+            backgroundImage: NetworkImage('${ConstantBaseUrls.usersPhotoBaseUrl}${usersList[index].photo_url}'),radius: 28.0),
             SizedBox(width: 11.5),
             Text(usersList[index].name, style: TextStyle(color: Colors.black, fontWeight: FontWeight.w500 , fontSize: 15))
             ],))),
