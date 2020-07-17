@@ -1,6 +1,7 @@
 import 'package:badges/badges.dart';
 import 'package:eventapp/screens/main_menu/home.dart';
 import 'package:eventapp/screens/main_menu/index.dart';
+import 'package:eventapp/screens/main_menu/add_post.dart';
 import 'package:eventapp/screens/login.dart';
 import 'package:eventapp/screens/register/register_details.dart';
 import 'package:eventapp/screens/register/register_phone.dart';
@@ -50,6 +51,7 @@ class MyApp extends StatelessWidget {
         Global.routes.register_details:(context)=> RegisterDetails(),
         Global.routes.register_success:(context)=> RegisterSuccess(),
         Global.routes.index:(context)=> Index(),
+        Global.routes.add_post:(context)=>AddPost(),
       },
     ))));
   }

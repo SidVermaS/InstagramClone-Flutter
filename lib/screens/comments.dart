@@ -51,10 +51,7 @@ class _CommentsState extends State<Comments>  {
     Screen.context=context;
     commentsBloc.add(FetchCommentsEvent());
 
-    return MaterialApp(
-        debugShowCheckedModeBanner: false,
-         theme: _appWidgets.getThemeData(),
-        home: WillPopScope(
+    return _appWidgets.getMaterialApp(WillPopScope(
       onWillPop: _onWillPop,
       child: Scaffold(
          resizeToAvoidBottomPadding: false,

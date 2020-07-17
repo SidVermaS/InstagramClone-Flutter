@@ -13,4 +13,7 @@ class Screen  {
   static void navigateToPage(Widget widget)  {
     Navigator.of(context).push(MaterialPageRoute(builder: (context)=>widget));
   }
+  static Future<dynamic> navigateAndRefresh(Widget widget) async {
+    return await Navigator.of(context).push(MaterialPageRoute(builder:(context)=>widget));
+  }
 }

@@ -41,7 +41,7 @@ dependencies:
   material_design_icons_flutter: ^4.0.5345
   lazy_load_scrollview: ^1.1.0
   url_launcher: ^5.5.0
-
+  image_gallery: ^1.2.0  
 
 
    

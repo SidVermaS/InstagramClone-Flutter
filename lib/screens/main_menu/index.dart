@@ -30,7 +30,7 @@ class Index extends StatefulWidget{
   _IndexState createState()=>_IndexState();
 }
 
-class _IndexState extends State<Index>  {
+class _IndexState extends State<Index>  {  
   int _currentIndex=0;
   List<Widget> widgetsList=[BlocProvider(create:(context)=>HomeBloc(), child: Home()), BlocProvider(create:(context)=>ExploreBloc(), child: Explore()), AddPost(), BlocProvider(create:(context)=>UsersBloc(),child: Users()), BlocProvider(create: (context)=>ProfileBloc(user: Global.user.getUserDetails()), child: Profile(user: Global.user.getUserDetails(), showBackButton: false,))];
   
@@ -44,7 +44,12 @@ class _IndexState extends State<Index>  {
      
     });
   }
-  
+    final GlobalKey<NavigatorState> page1TabNavKey =
+      GlobalKey<NavigatorState>(),page2TabNavKey =
+      GlobalKey<NavigatorState>(),page3TabNavKey =
+      GlobalKey<NavigatorState>(),page4TabNavKey =
+      GlobalKey<NavigatorState>(),page5TabNavKey =
+      GlobalKey<NavigatorState>();
   Widget build(BuildContext context)  {
     return CupertinoTabScaffold(
       
@@ -112,15 +117,24 @@ class _IndexState extends State<Index>  {
     );
   }
   
-  
 
-  void onTabTapped(int index) {
-    setState(() {
-      _currentIndex = index;
-    });
+  void onTabTapped(int index) async {
+    if(index==2) {
+      bottomBarToggle();    
+      await Navigator.pushNamed(context, Global.routes.add_post);
+      bottomBarToggle();
+    } else  {
+      setState(() {
+        _currentIndex = index;      
+      });
+    }
+  }
+   void bottomBarToggle()  {
+    context.read<ChangeCupertinoTabBar>().toggle();
   }
 }
 
+  
 
 
 

@@ -1,9 +1,44 @@
+import 'package:eventapp/blocs/gallery_bloc/bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:provider/provider.dart';
 
-class AddPost extends StatelessWidget{
+import 'package:eventapp/screens/sub_screens/gallery.dart';
+import 'package:eventapp/utils/app_widgets.dart';
+
+class AddPost extends StatefulWidget{
+  _AddPostState createState()=>_AddPostState();
+} 
+
+class _AddPostState extends State<AddPost> with SingleTickerProviderStateMixin  {
+  TabController _tabController;
+    AppWidgets _appWidgets=AppWidgets();
+  void initState()  {
+    super.initState();
+     
+    _tabController=TabController(vsync: this, length: 2);
+  }
+  void dispose()  {
+    super.dispose();
+    _tabController.dispose();
+  }
+ 
   Widget build(BuildContext context)  {
-    return Scaffold(
-      body: Center(child: Text('AddPost'))
-    );
+    return _appWidgets.getMaterialApp(Scaffold(
+      bottomNavigationBar: BottomAppBar(
+        
+        child: TabBar(
+        indicatorColor: Colors.black,
+        labelPadding: EdgeInsets.fromLTRB(0, 10, 0, 10),
+        controller: _tabController, tabs: <Widget>[getTab('GALLERY'),getTab('PHOTO')])),
+      body: TabBarView(controller: _tabController,children: <Widget>[
+        BlocProvider(create:(context)=>GalleryBloc(), child: Gallery()),Text('Photo')
+      ],)
+      
+    ));
+  }
+  Widget getTab(String text)  {
+    return Text(text,style: TextStyle(fontSize: 15),);
   }
 }

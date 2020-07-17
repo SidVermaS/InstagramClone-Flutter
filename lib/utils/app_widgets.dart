@@ -4,14 +4,16 @@ import 'package:flutter/material.dart';
 class AppWidgets  {
   BuildContext context;
 
-  Future<dynamic> navigateAndRefresh(Widget widget) async {
-    return await Navigator.of(context).push(MaterialPageRoute(builder:(context)=>widget));
-  }
-  ThemeData getThemeData()  {
-    return ThemeData(
+  
+  Widget getMaterialApp(Widget widget)  {
+    return MaterialApp(
+       debugShowCheckedModeBanner: false,
+      theme: ThemeData(
         primaryColor: Screen.eventGrey,
         primaryColorDark: Screen.eventBlue
-      );
+      ),
+      home: widget
+    );
   }
   Widget getRaisedButton(VoidCallback voidCallback, String text)  {
     return ButtonTheme(

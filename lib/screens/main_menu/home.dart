@@ -205,7 +205,7 @@ class _HomeState extends State<Home>{
   }
   void navigateAndRefresh(Widget widget, int index) async {
     context.read<ChangeCupertinoTabBar>().toggle();
-    int dynamicValue=await appWidgets.navigateAndRefresh(widget);
+    int dynamicValue=await Screen.navigateAndRefresh(widget);
     ModifyCommentsCountEvent(index: index, comments_count: dynamicValue);
     context.read<ChangeCupertinoTabBar>().toggle();
   }

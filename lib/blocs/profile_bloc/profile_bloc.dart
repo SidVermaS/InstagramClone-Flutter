@@ -61,10 +61,8 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState>  {
     try {
       http.Response response=await Global.connect.sendGet('${ConstantSubUrls.user}${user.user_id}');
       Map<String, dynamic> mapResponse=jsonDecode(response.body);
-      if(response.statusCode==200)  {
-         print('~~~ 1 mes: ${(mapResponse['user'])}'); 
+      if(response.statusCode==200)  { 
         user=User.fromJsonProfile(mapResponse['user']);   
-         print('~~~ 2 mes: ${user.toJsonGlobal()} rc: ${user.reactions_count}'); 
       } else  {      
         yield ProfileErrorState(message: mapResponse['message'], user: user, postsList: postsList);              
       }
