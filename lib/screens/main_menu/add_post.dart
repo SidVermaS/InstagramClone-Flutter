@@ -1,10 +1,12 @@
 import 'package:eventapp/blocs/gallery_bloc/bloc.dart';
+import 'package:eventapp/blocs/photo_bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
 
 import 'package:eventapp/screens/sub_screens/gallery.dart';
+import 'package:eventapp/screens/sub_screens/photo.dart';
 import 'package:eventapp/utils/app_widgets.dart';
 
 class AddPost extends StatefulWidget{
@@ -33,7 +35,7 @@ class _AddPostState extends State<AddPost> with SingleTickerProviderStateMixin  
         labelPadding: EdgeInsets.fromLTRB(0, 10, 0, 10),
         controller: _tabController, tabs: <Widget>[getTab('GALLERY'),getTab('PHOTO')])),
       body: TabBarView(controller: _tabController,children: <Widget>[
-        BlocProvider(create:(context)=>GalleryBloc(), child: Gallery()),Text('Photo')
+        BlocProvider(create:(context)=>GalleryBloc(), child: Gallery()),BlocProvider(create:(context)=>PhotoBloc(), child: Photo())
       ],)
       
     ));

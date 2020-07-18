@@ -12,7 +12,7 @@ class ProfileInitialState extends ProfileState  {
 }
 
 class ProfileLoadedState extends ProfileState {
-   List<Post> postsList;
+  List<Post> postsList;
   User user;
   ProfileLoadedState({this.user,this.postsList});
   List<Object> get props=>[user,postsList];
