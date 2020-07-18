@@ -52,6 +52,23 @@ class _IndexState extends State<Index>  {
      
     });
   }
+  List<BottomNavigationBarItem> getBottomNavigationBarItem()  {
+    List<BottomNavigationBarItem> bottomNavigationBarItemList=List.generate(4, (int i)  {
+      return BottomNavigationBarItem(icon: _currentIndex==i?Icon(selectedIcons[i]):Icon(unselectedIcons[i], color: Colors.grey));
+    });
+
+    bottomNavigationBarItemList.add(BottomNavigationBarItem(icon: 
+                      Container(
+                        padding: EdgeInsets.all(2.5),
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          // borderRadius:
+                          border: Border.all(color: _currentIndex==4?Colors.black:Colors.transparent, width: 0.8)
+                        ),
+                        child: CircleAvatar(
+                      backgroundImage: NetworkImage('${ConstantBaseUrls.usersPhotoBaseUrl}${Global.user.photo_url}'),radius: 10.2))));
+    return bottomNavigationBarItemList;
+  } 
   Widget build(BuildContext context)  {
     return CupertinoTabScaffold(
       
@@ -61,34 +78,7 @@ class _IndexState extends State<Index>  {
         inactiveColor: Colors.black,
         currentIndex: _currentIndex,
         onTap: onTabTapped,
-        items: [
-          BottomNavigationBarItem(icon: 
-            Icon(_currentIndex==0?selectedIcons[0]:unselectedIcons[0])
-          ),
-            BottomNavigationBarItem(icon: 
-            Icon(_currentIndex==1?selectedIcons[1]:unselectedIcons[1]),
-          ),
-            BottomNavigationBarItem(icon: 
-                      Icon(_currentIndex==2?selectedIcons[2]:unselectedIcons[2]),
-                    ),
-            BottomNavigationBarItem(icon: 
-                      Icon(_currentIndex==3?selectedIcons[3]:unselectedIcons[3]),
-                    ),
-            BottomNavigationBarItem(icon: 
-                      Container(
-                        padding: EdgeInsets.all(2.5),
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          // borderRadius:
-                          border: Border.all(color: _currentIndex==4?Colors.black:Colors.transparent, width: 0.8)
-                        ),
-                        child: CircleAvatar(
-                      backgroundImage: NetworkImage('${ConstantBaseUrls.usersPhotoBaseUrl}${Global.user.photo_url}'),radius: 10.2)),
-                    
-                    ),
-
-
-        ],
+        items: getBottomNavigationBarItem(),
 
       ):InvisibleCupertinoTabBar(),
       tabBuilder: (BuildContext context, int index) {

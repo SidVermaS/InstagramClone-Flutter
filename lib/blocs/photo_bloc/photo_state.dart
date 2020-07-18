@@ -24,8 +24,8 @@ class CameraErrorState extends PhotoState {
 }
 class TakePhotoErrorState extends PhotoState {
   String message;
+    CameraController cameraController;
+  TakePhotoErrorState({this.message,this.cameraController});
 
-  TakePhotoErrorState({this.message});
-
-  List<Object> get props=>[message];
+  List<Object> get props=>[message, cameraController];
 }

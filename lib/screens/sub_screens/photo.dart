@@ -10,10 +10,14 @@ import 'package:eventapp/utils/screen.dart';
 import 'package:eventapp/utils/app_widgets.dart';
 
 class Photo extends StatefulWidget  {
-  _PhotoState createState()=>_PhotoState();
+  VoidCallback backVoidCallback;
+  Photo({this.backVoidCallback});
+  _PhotoState createState()=>_PhotoState(backVoidCallback: backVoidCallback);
 } 
 
 class _PhotoState extends State<Photo>  {
+  VoidCallback backVoidCallback;
+  _PhotoState({this.backVoidCallback});
   AppWidgets appWidgets=AppWidgets();
   PhotoBloc photoBloc;
   void initState()  {
@@ -27,13 +31,12 @@ class _PhotoState extends State<Photo>  {
     super.dispose();
     photoBloc.close();
   }
-  Future<bool> _onWillPop() async {
-    return true;
-  }
   Widget build(BuildContext context)  {
-    return WillPopScope(
-      onWillPop: _onWillPop,
-      child: Scaffold(
+    return 
+    // WillPopScope(
+    //   onWillPop: _onWillPop,
+    //   child: 
+      Scaffold(
       body: Container(
         child: ListView(children:<Widget>[
               Container(
@@ -41,7 +44,7 @@ class _PhotoState extends State<Photo>  {
                 child: AppBar(
                   centerTitle: false,
                 leading: GestureDetector( child: Icon(Icons.close, size: 30, color: Colors.black54),onTap: ()  {
-                  _onWillPop();
+                  backVoidCallback();
                 },),
                 title: Container(transform: Matrix4.translationValues(-5, 0,0), child: Text('Photo')),
                )),
@@ -56,24 +59,30 @@ class _PhotoState extends State<Photo>  {
         child: BlocBuilder<PhotoBloc, PhotoState>  ( 
         builder: (context, state) { 
           if(state is CameraLoadedState) {
-
-            return ListView(
+            return showCamera(state.cameraController);          
+          } else if(state is TakePhotoErrorState)  {
+            return showCamera(state.cameraController);
+          }
+          return appWidgets.getCircularProgressIndicator();
+        })
+        ) ])
+         
+        
+        )
+        );
+  }
+  Widget showCamera(CameraController cameraController)  {
+      return ListView(
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
                 children:<Widget>[
-                // Transform.scale(
-                  
-                // scale: 3 / 4, // 0.5/state.cameraController.value.aspectRatio,
-                // child: AspectRatio(
-                //     aspectRatio: state.cameraController.value.aspectRatio,
-                //     child: CameraPreview(state.cameraController)
-                //   ))
+            
 
                 Container(
                  
                   height: Screen.height/2,
                   width: double.infinity,
-                  child:  CameraPreview(state.cameraController)),
+                  child:  CameraPreview(cameraController)),
 
                   GestureDetector(behavior: HitTestBehavior.translucent, onTap:()  {
                     photoBloc.add(TakePhoto());
@@ -95,12 +104,5 @@ class _PhotoState extends State<Photo>  {
                   ))
                 ]);
              
-              }
-               return appWidgets.getCircularProgressIndicator();
-        })
-        ) ])
-         
-        
-        )));
   }
 }

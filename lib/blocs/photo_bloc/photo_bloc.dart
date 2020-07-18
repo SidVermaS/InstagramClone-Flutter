@@ -1,10 +1,15 @@
+import 'dart:async';
+import 'dart:io';
 import 'dart:convert';
-
 import 'package:camera/camera.dart';
+import 'package:eventapp/blocs/new_post_bloc/bloc.dart';
+import 'package:eventapp/screens/new_post.dart';
+import 'package:eventapp/utils/screen.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:path_provider/path_provider.dart';
+
 import 'package:eventapp/blocs/photo_bloc/bloc.dart';
 import 'package:eventapp/utils/global.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-
 class PhotoBloc extends Bloc<PhotoEvent, PhotoState>  {
 
   PhotoBloc():super(null);
@@ -45,12 +50,16 @@ class PhotoBloc extends Bloc<PhotoEvent, PhotoState>  {
 
   Stream<PhotoState> mapTakePhotoEventToState(TakePhoto event) async*  {
      try {
-        String filePath='${DateTime.now().millisecondsSinceEpoch}.jpg';
+       Directory directory=await getApplicationDocumentsDirectory();
+       String directoryPath='${directory.path}/uploads';
+       await Directory(directoryPath).create(recursive: true);
+        String filePath='${directory.path}\${DateTime.now().millisecondsSinceEpoch}.jpg';
       
         await cameraController.takePicture(filePath);
-
+        Screen.navigateToPage(BlocProvider(create:(context)=>NewPostBloc(), child: NewPost(file: File(filePath))));
     } catch(e)  {
-      yield TakePhotoErrorState(message: e.toString());
+      print('~~~ e: ${e.toString()}');
+      yield TakePhotoErrorState(message: e.toString(), cameraController: cameraController);
     }  
   }
 }
