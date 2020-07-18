@@ -31,7 +31,7 @@ class _NewPostState extends State<NewPost>  {
     newPostBloc.close();
   }
   Future<bool> _onWillPop() async {
-    return false;
+    return true;
   }
   Widget build(BuildContext context)  {
     return WillPopScope(
@@ -42,40 +42,51 @@ class _NewPostState extends State<NewPost>  {
                 leading: GestureDetector( child: Icon(Icons.close, size: 30, color: Colors.black54),onTap: ()  {
                   _onWillPop();
                 },),
-                title: Container( child: Text('New Post')),
+                title: Container( child: Text('New Post', style: TextStyle(fontSize: 20),)),
                 actions: <Widget>[FlatButton(onPressed: () {
-                 
-              },child: Text('Next', style: TextStyle(color: Screen.eventBlue, fontSize: 16.5)))],),
+                 if(newPostBloc.captionBehaviorSubject.value.length<4) {
+                   Screen.showToast('Caption should have atleast 4 characters');
+                 }  else  {
+                   newPostBloc.add(SubmitPostEvent());
+                 }
+              },child: Text('Share', style: TextStyle(color: Screen.eventBlue, fontSize: 17.5)))],),
       body: Container(
+       
         child: BlocListener<NewPostBloc, NewPostState>(
         listener: (BuildContext context, NewPostState state)  {
           if(state is NewPostErrorState)  {
+            Screen.showToast(state.message);
+          } else if(state is SubmittedErrorState)  {
             Screen.showToast(state.message);
           }
         },
         child: BlocBuilder<NewPostBloc, NewPostState>  ( 
         builder: (context, state) { 
+          if(state is NewPostLoadedState || state is SubmittedErrorState) {
           if(state is NewPostLoadedState) {
 
             return ListView(children:<Widget>[
-              TextField(
-                            onChanged: (val)=>newPostBloc.captionStreamSink.add(val),
-                            // controller: _commentTextEditingController,
-                            minLines: 1,
-                            maxLines: 3,
-                         decoration: InputDecoration(
-                           prefix: Image.file(state.file, ),
-                           border: InputBorder.none,
-                           contentPadding: EdgeInsets.fromLTRB(0,0,0,0),
-                             labelText: 'Write a caption...',
-                    labelStyle:  TextStyle(color: Colors.grey[500], fontSize: 15.0),
-                    hintText: 'Write a caption...',
-                    hintStyle: TextStyle(color: Colors.grey[500], fontSize: 15.0),
-                    floatingLabelBehavior: FloatingLabelBehavior.never,
-                           )
-                           )
-              
-              ]);
+              Container( 
+                margin: EdgeInsets.fromLTRB(15,18,15,18),
+                child: TextField(
+                onChanged: (val)=>newPostBloc.captionStreamSink.add(val),
+                // controller: _commentTextEditingController,
+                minLines: 1,
+                maxLines: null,
+                decoration: InputDecoration(
+                  prefixIcon: Container(margin: EdgeInsets.only(right: 10),child: Image.file(state.file, height: 55, width: 55, fit: BoxFit.cover)),
+                  border: InputBorder.none,
+                  contentPadding: EdgeInsets.fromLTRB(0,0,0,0),
+                  labelText: 'Write a caption...',
+                  labelStyle:  TextStyle(color: Colors.grey[500], fontSize: 15.0),
+                  hintText: 'Write a caption...',
+                  hintStyle: TextStyle(color: Colors.grey[500], fontSize: 15.0),
+                  floatingLabelBehavior: FloatingLabelBehavior.never,
+                )
+              )),
+              Container(color: Colors.grey[300], height: 1, width: double.infinity)
+            ]);
+          }
           }
           return appWidgets.getCircularProgressIndicator();
         })))));

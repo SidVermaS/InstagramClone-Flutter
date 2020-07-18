@@ -53,7 +53,7 @@ class PhotoBloc extends Bloc<PhotoEvent, PhotoState>  {
        Directory directory=await getApplicationDocumentsDirectory();
        String directoryPath='${directory.path}/uploads';
        await Directory(directoryPath).create(recursive: true);
-        String filePath='${directory.path}\${DateTime.now().millisecondsSinceEpoch}.jpg';
+        String filePath='${directory.path}/${DateTime.now().millisecondsSinceEpoch}.jpg';
       
         await cameraController.takePicture(filePath);
         Screen.navigateToPage(BlocProvider(create:(context)=>NewPostBloc(), child: NewPost(file: File(filePath))));
