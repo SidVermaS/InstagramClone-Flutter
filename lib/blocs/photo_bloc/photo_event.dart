@@ -2,8 +2,8 @@ abstract class PhotoEvent {
 
 }
 class GetAvailableCameras extends PhotoEvent  {
-
-  GetAvailableCameras();
+   int camera;
+  GetAvailableCameras({this.camera});
 
   List<Object> get props=>null;
 

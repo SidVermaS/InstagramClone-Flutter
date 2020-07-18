@@ -20,21 +20,21 @@ class PhotoBloc extends Bloc<PhotoEvent, PhotoState>  {
   Stream<PhotoState> mapEventToState(PhotoEvent event) async*  {
     if(event is GetAvailableCameras) {
       cameraDescriptionsList=await availableCameras();
-      GetCamera();
+       yield* mapGetCameraEventToState(0);  
     }
     else if(event is GetCamera)  {
-      yield* mapGetCameraEventToState(event);         
+      yield* mapGetCameraEventToState(event.camera);         
     } else if(event is TakePhoto) {
-      yield *mapTakePhotoEventToState(event);
+      yield* mapTakePhotoEventToState(event);
     }
 
     
 
 
   }
-  Stream<PhotoState> mapGetCameraEventToState(GetCamera event) async*  {
+  Stream<PhotoState> mapGetCameraEventToState(int camera) async*  {
     try {
-      cameraController=CameraController(cameraDescriptionsList[event.camera], ResolutionPreset.medium);
+      cameraController=CameraController(cameraDescriptionsList[camera], ResolutionPreset.medium);
       await cameraController.initialize();
       
       yield CameraLoadedState(cameraController: cameraController);
@@ -48,24 +48,6 @@ class PhotoBloc extends Bloc<PhotoEvent, PhotoState>  {
         String filePath='${DateTime.now().millisecondsSinceEpoch}.jpg';
       
         await cameraController.takePicture(filePath);
-      
-      
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
     } catch(e)  {
       yield TakePhotoErrorState(message: e.toString());

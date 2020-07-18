@@ -68,10 +68,12 @@ class _GalleryState extends State<Gallery>  {
                 itemCount: state.imagesList.length,
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3, mainAxisSpacing: 1.5, crossAxisSpacing: 1.5),
                 itemBuilder: (BuildContext context, int index)  {
-                  return GridTile(child:FadeInImage(
+                  return GridTile(child: Opacity(
+                    opacity: index==state.index?0.6:0,
+                    child: FadeInImage(
                     placeholder: AssetImage('assets/images/gallery_placeholder.png'),
                     fit: BoxFit.cover,
-                    image: FileImage(File(state.imagesList[index].toString()))));
+                    image: FileImage(File(state.imagesList[index].toString())))));
                 }
               )]);
           }

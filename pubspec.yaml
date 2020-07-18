@@ -39,6 +39,7 @@ dependencies:
   flutter_phoenix: ^0.1.0
   shimmer: ^1.1.1 
   material_design_icons_flutter: ^4.0.5345
+  outline_material_icons: ^0.1.1
   lazy_load_scrollview: ^1.1.0
   url_launcher: ^5.5.0
   image_gallery: ^1.2.0  

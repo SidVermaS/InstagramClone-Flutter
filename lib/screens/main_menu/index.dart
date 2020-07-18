@@ -2,15 +2,11 @@ import 'package:eventapp/blocs/explore_bloc/bloc.dart';
 import 'package:eventapp/blocs/home_bloc/home_bloc.dart';
 import 'package:eventapp/blocs/profile_bloc/bloc.dart';
 import 'package:eventapp/blocs/users_bloc/bloc.dart';
-import 'package:eventapp/screens/login.dart';
 import 'package:eventapp/screens/main_menu/add_post.dart';
 import 'package:eventapp/screens/main_menu/explore.dart';
 import 'package:eventapp/screens/main_menu/home.dart';
 import 'package:eventapp/screens/main_menu/profile.dart';
 import 'package:eventapp/screens/main_menu/users.dart';
-import 'package:eventapp/screens/register/register_details.dart';
-import 'package:eventapp/screens/register/register_phone.dart';
-import 'package:eventapp/screens/register/register_success.dart';
 import 'package:eventapp/networks/constant_base_urls.dart';
 import 'package:eventapp/utils/change_cupertino_tab_bar.dart';
 import 'package:eventapp/utils/global.dart';
@@ -22,6 +18,7 @@ import 'dart:math' as math;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:outline_material_icons/outline_material_icons.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -33,7 +30,18 @@ class Index extends StatefulWidget{
 class _IndexState extends State<Index>  {  
   int _currentIndex=0;
   List<Widget> widgetsList=[BlocProvider(create:(context)=>HomeBloc(), child: Home()), BlocProvider(create:(context)=>ExploreBloc(), child: Explore()), AddPost(), BlocProvider(create:(context)=>UsersBloc(),child: Users()), BlocProvider(create: (context)=>ProfileBloc(user: Global.user.getUserDetails()), child: Profile(user: Global.user.getUserDetails(), showBackButton: false,))];
-  
+   List<IconData> unselectedIcons = <IconData>[
+      OMIcons.home,
+      Icons.search,
+      OMIcons.addBox,
+      Icons.favorite_border,
+    ];
+     List<IconData> selectedIcons = <IconData>[
+      Icons.home,
+      Icons.search,
+      Icons.add_box,
+      Icons.favorite,
+    ];
   void initState()  {
     super.initState();
     Future.delayed(Duration.zero, ()  {
@@ -44,12 +52,6 @@ class _IndexState extends State<Index>  {
      
     });
   }
-    final GlobalKey<NavigatorState> page1TabNavKey =
-      GlobalKey<NavigatorState>(),page2TabNavKey =
-      GlobalKey<NavigatorState>(),page3TabNavKey =
-      GlobalKey<NavigatorState>(),page4TabNavKey =
-      GlobalKey<NavigatorState>(),page5TabNavKey =
-      GlobalKey<NavigatorState>();
   Widget build(BuildContext context)  {
     return CupertinoTabScaffold(
       
@@ -61,16 +63,16 @@ class _IndexState extends State<Index>  {
         onTap: onTabTapped,
         items: [
           BottomNavigationBarItem(icon: 
-            Icon(FontAwesomeIcons.home,),
+            Icon(_currentIndex==0?selectedIcons[0]:unselectedIcons[0])
           ),
             BottomNavigationBarItem(icon: 
-            Icon(Icons.search),
+            Icon(_currentIndex==1?selectedIcons[1]:unselectedIcons[1]),
           ),
             BottomNavigationBarItem(icon: 
-                      Icon(FontAwesomeIcons.plusSquare),
+                      Icon(_currentIndex==2?selectedIcons[2]:unselectedIcons[2]),
                     ),
             BottomNavigationBarItem(icon: 
-                      Icon(Icons.favorite),
+                      Icon(_currentIndex==3?selectedIcons[3]:unselectedIcons[3]),
                     ),
             BottomNavigationBarItem(icon: 
                       Container(
