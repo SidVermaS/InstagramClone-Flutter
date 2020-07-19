@@ -164,14 +164,19 @@ class _DirectState extends State<Direct>  {
       ),
     ),
                       ],):Row( 
+                        // crossAxisAlignment: CrossAxisAlignment.center,
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: <Widget>[
                         Container(
-                            margin: EdgeInsets.only(right: 5),
+                            margin: EdgeInsets.only(right: 5, top:(index==0 || messagesList[index].user.user_id!=messagesList[index-1].user.user_id)?15:0),
                             child: ((messagesList.length-1)==index || messagesList[index].user.user_id!=messagesList[index+1].user.user_id)?CircleAvatar(
                             backgroundImage: NetworkImage('${ConstantBaseUrls.photosPhotoBaseUrl}${Global.user.photo_url}'),radius: 15.0):Container(decoration: BoxDecoration(shape: BoxShape.circle,) ,width:30, height: 15)),
-
-                          Container(
+Column(
+  crossAxisAlignment: CrossAxisAlignment.start,
+  mainAxisAlignment: MainAxisAlignment.start,
+  children:<Widget>[
+  (index==0 || messagesList[index].user.user_id!=messagesList[index-1].user.user_id)?Container(margin: EdgeInsets.only(left: 11.5, bottom:6),child: Text(messagesList[index].user.name, style: TextStyle(fontSize: 11, color: Colors.grey[500]))):SizedBox(width: 0, height: 0),
+  Container(
                             padding: EdgeInsets.all(10),
           decoration: BoxDecoration(
         color: Colors.grey[300],
@@ -185,6 +190,8 @@ class _DirectState extends State<Direct>  {
             style: TextStyle(color: Colors.black),
           ),
         ),
+]),
+                          
                       ],));
                   }
                   );
