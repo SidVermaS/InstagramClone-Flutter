@@ -22,18 +22,17 @@ class _DirectState extends State<Direct>  {
 
   AppWidgets _appWidgets=AppWidgets();
   DirectBloc directBloc;
-  final TextEditingController _messageTextTextEditingController=TextEditingController();
   void initState()  {
     super.initState();
     _appWidgets.context=context;
     Screen.context=context;
     
     directBloc= BlocProvider.of<DirectBloc>(context);
-    directBloc.add(InitializeDirectEvent());
+    directBloc.add(FetchDirectEvent());
+    directBloc.listenMessages();
    }
   void dispose()  {
     super.dispose();
-    _messageTextTextEditingController.dispose();
     directBloc.close();
   }
   
@@ -69,29 +68,29 @@ class _DirectState extends State<Direct>  {
                         mainAxisAlignment: MainAxisAlignment.start,
                         children:<Widget>[
                       
-                          Container(
-                            margin: EdgeInsets.only(right: 12),
-                            child: CircleAvatar(
-                            backgroundImage: NetworkImage('${ConstantBaseUrls.photosPhotoBaseUrl}${Global.user.photo_url}'),radius: 15.0)),
+                          // Container(
+                          //   margin: EdgeInsets.only(right: 12),
+                          //   child: CircleAvatar(
+                          //   backgroundImage: NetworkImage('${ConstantBaseUrls.photosPhotoBaseUrl}${Global.user.photo_url}'),radius: 15.0)),
                           Flexible(child: TextField(
                             onChanged: (val)=>directBloc.messageTextStreamSink.add(val),
-                            controller: _messageTextTextEditingController,
+                            controller: directBloc.messageTextTextEditingController,
                             minLines: 1,
                             maxLines: 3,
                          decoration: InputDecoration(
-                           border: InputBorder.none,
-                           contentPadding: EdgeInsets.fromLTRB(0,0,0,5),
-                             labelText: 'Add a messageText...',
-                    labelStyle:  TextStyle(color: Colors.grey[500], fontSize: 15.0),
-                    hintText: 'Add a messageText...',
-                    hintStyle: TextStyle(color: Colors.grey[500], fontSize: 15.0),
-                    floatingLabelBehavior: FloatingLabelBehavior.never,
-                           )
-                           ),  
-                          ),
+                          border: InputBorder.none,
+                          contentPadding: EdgeInsets.fromLTRB(0,0,0,5),
+                          labelText: 'Send a message...',
+                          labelStyle:  TextStyle(color: Colors.grey[500], fontSize: 15.0),
+                          hintText: 'Send a message...',
+                          hintStyle: TextStyle(color: Colors.grey[500], fontSize: 15.0),
+                          floatingLabelBehavior: FloatingLabelBehavior.never,
+                    )
+                  ),  
+              ),
               GestureDetector(onTap: () {
-                directBloc.add(SendMessageEvent(message_text: _messageTextTextEditingController.text));
-                _messageTextTextEditingController.text='';
+                // FocusScope.of(context).unfocus();
+                directBloc.add(SendMessageEvent());
               }, behavior: HitTestBehavior.translucent, child: 
                StreamBuilder<String>(
                  initialData: '',
@@ -109,13 +108,7 @@ class _DirectState extends State<Direct>  {
         Container(
         margin: EdgeInsets.fromLTRB(0,13,0, 0),
         padding: EdgeInsets.only(bottom: 5),
-        child: 
-        ListView(
-                shrinkWrap: true,
-                children: <Widget>[ 
-                  
-                  Container(margin: EdgeInsets.fromLTRB(0, 13, 0, 13), width: double.infinity, height: 1.0, color: Colors.grey[300]),
-          Container(
+        child: Container(
            margin: EdgeInsets.fromLTRB(7, 0, 7, 0),
           child: 
           BlocListener<DirectBloc, DirectState> ( 
@@ -126,15 +119,8 @@ class _DirectState extends State<Direct>  {
             },
             child: BlocBuilder<DirectBloc, DirectState> (
             builder: (BuildContext context, DirectState state) {
-              if(state is DirectLoadedState)  {                 
-                return ListView(
-                  physics: const NeverScrollableScrollPhysics(),
-                  shrinkWrap: true,
-                  children:<Widget>[
-                    
-                    
-                      
-                  ]);
+              if(state is DirectLoadedState)  {    
+                return _loadMessages(state.messagesList);
               }
               return _appWidgets.getCircularProgressIndicator();
               }
@@ -142,8 +128,6 @@ class _DirectState extends State<Direct>  {
           )
         ),
                
-                ],
-                )
                 ),
                 
     )));
@@ -151,20 +135,47 @@ class _DirectState extends State<Direct>  {
   }
 
 
-     Widget _loadDirect(List<Message> messageList)  {
-      return ListView.builder(
-                    physics: const NeverScrollableScrollPhysics(),
-                      shrinkWrap: true,
-                      itemCount: messageList.length,
-                      itemBuilder: (BuildContext context, int index)  {  
-                        return Container(margin: EdgeInsets.fromLTRB(0, 10, 0, 10), child:Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children:<Widget>[
-                           
-                    
-                    ]));
-                      }
-                    );
+     Widget _loadMessages(List<Message> messagesList)  {
+        print('~~~~ lm');
+      return  ListView.builder(
+                  itemCount:messagesList.length,
+                  // physics: const NeverScrollableScrollPhysics(),
+                  // shrinkWrap: true,
+                  itemBuilder: (BuildContext context, int index)  {
+                    print('~~~~ lm');
+                    return Container( margin: EdgeInsets.fromLTRB(0, 5, 0, 5),child: messagesList[index].user.user_id==Global.user.user_id?
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: <Widget>[
+                        Container(
+                          decoration: BoxDecoration(
+                            color: Colors.grey[300],
+                            borderRadius: BorderRadius.circular(15)
+                          ),
+                          padding: EdgeInsets.all(10),
+                          child: Text(messagesList[index].message_text, style: TextStyle(color: Colors.black)))
+                      ],):Row( 
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: <Widget>[
+                        // ((messagesList.length-1)==index || messagesList[index].user.user_id!=messagesList[index+1].user.user_id)?Container(
+                        //     margin: EdgeInsets.only(right: 0),
+                        //     child: CircleAvatar(
+                        //     backgroundImage: NetworkImage('${ConstantBaseUrls.photosPhotoBaseUrl}${Global.user.photo_url}'),radius: 15.0)):Container( margin: EdgeInsets.only(right: 0),width:15, height: 15),
+
+                        // Expanded(child: 
+                        Container(
+                          decoration: BoxDecoration(
+                          // color: Colors.deepPurple[400],
+                          borderRadius: BorderRadius.circular(15)
+                        ),
+                         
+                          padding: EdgeInsets.all(10),
+                          child: Text(messagesList[index].message_text, style: TextStyle(color: Colors.black)))
+                        // )    
+                      ],));
+                  }
+                  );
+             
     }
 
 

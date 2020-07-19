@@ -2,8 +2,8 @@ abstract class DirectEvent  {
 
 }
 
-class InitializeDirectEvent extends DirectEvent  {
-   InitializeDirectEvent(); 
+class FetchDirectEvent extends DirectEvent  {
+   FetchDirectEvent(); 
 
     List<Object> get props=>null;
 
