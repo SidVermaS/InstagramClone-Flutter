@@ -148,7 +148,7 @@ class _ProfileState extends State<Profile>{
        position: BadgePosition.bottomRight(bottom: -5, right: -5),
       badgeContent: Text('+', style: TextStyle(color: Colors.white, fontWeight: FontWeight.w400, fontSize: 23)),
       child: CircleAvatar(
-            backgroundImage: NetworkImage('${ConstantBaseUrls.photosPhotoBaseUrl}${user.photo_url}',), radius: 40
+            backgroundImage: NetworkImage('${ConstantBaseUrls.usersPhotoBaseUrl}${user.photo_url}',), radius: 40
 
         )),
     //  SizedBox(width: 35),

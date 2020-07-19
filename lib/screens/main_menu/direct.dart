@@ -170,7 +170,7 @@ class _DirectState extends State<Direct>  {
                         Container(
                             margin: EdgeInsets.only(right: 5, top:(index==0 || messagesList[index].user.user_id!=messagesList[index-1].user.user_id)?15:0),
                             child: ((messagesList.length-1)==index || messagesList[index].user.user_id!=messagesList[index+1].user.user_id)?CircleAvatar(
-                            backgroundImage: NetworkImage('${ConstantBaseUrls.photosPhotoBaseUrl}${Global.user.photo_url}'),radius: 15.0):Container(decoration: BoxDecoration(shape: BoxShape.circle,) ,width:30, height: 15)),
+                            backgroundImage: NetworkImage('${ConstantBaseUrls.usersPhotoBaseUrl}${messagesList[index].user.photo_url}'),radius: 15.0):Container(decoration: BoxDecoration(shape: BoxShape.circle,) ,width:30, height: 15)),
 Column(
   crossAxisAlignment: CrossAxisAlignment.start,
   mainAxisAlignment: MainAxisAlignment.start,

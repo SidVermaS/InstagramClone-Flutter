@@ -8,7 +8,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shimmer/shimmer.dart';
 
 class UsersWidget {
-  BuildContext context;
+  // BuildContext context;
    Widget loadUsersShimmer()  {
     return Shimmer.fromColors(
                 baseColor: Colors.grey[300],
