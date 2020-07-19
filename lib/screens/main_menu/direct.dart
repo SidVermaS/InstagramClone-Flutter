@@ -62,9 +62,21 @@ class _DirectState extends State<Direct>  {
               title: _appWidgets.getPageTitle('Direct')
       ),
       bottomNavigationBar: BottomAppBar(  
+        color: Colors.white,
         child: Container(
-                margin: EdgeInsets.fromLTRB(10, 0, 10, 0),    
-                      child:Row(
+          color: Colors.white,
+          height: Screen.height*0.085,
+          constraints: BoxConstraints(maxHeight:  Screen.height*0.145,),
+           margin: EdgeInsets.fromLTRB(13, 13, 13, 13),   
+          child: Container(
+             height: Screen.height*0.085,
+               constraints: BoxConstraints(maxHeight:  Screen.height*0.145),
+               
+          decoration: BoxDecoration(borderRadius: BorderRadius.circular(30), border: Border.all(color: Colors.grey[400])),
+                margin: EdgeInsets.fromLTRB(0, 0, 0, 0),   
+                padding: EdgeInsets.fromLTRB(10, 0, 10, 5),
+                      child:
+                      Row(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children:<Widget>[
                       
@@ -72,14 +84,15 @@ class _DirectState extends State<Direct>  {
                           //   margin: EdgeInsets.only(right: 12),
                           //   child: CircleAvatar(
                           //   backgroundImage: NetworkImage('${ConstantBaseUrls.photosPhotoBaseUrl}${Global.user.photo_url}'),radius: 15.0)),
-                          Flexible(child: TextField(
+                          Flexible(child: 
+                          TextField(
                             onChanged: (val)=>directBloc.messageTextStreamSink.add(val),
                             controller: directBloc.messageTextTextEditingController,
                             minLines: 1,
                             maxLines: 3,
                          decoration: InputDecoration(
                           border: InputBorder.none,
-                          contentPadding: EdgeInsets.fromLTRB(0,0,0,5),
+                          contentPadding: EdgeInsets.all(0),
                           labelText: 'Send a message...',
                           labelStyle:  TextStyle(color: Colors.grey[500], fontSize: 15.0),
                           hintText: 'Send a message...',
@@ -98,13 +111,14 @@ class _DirectState extends State<Direct>  {
                  initialData: '',
               stream: directBloc.messageTextStream,
               builder:  (BuildContext context, AsyncSnapshot<String> asyncSnapshot) {
-                return Text('Send', style: TextStyle(color: asyncSnapshot.data==null || asyncSnapshot.data==''?Colors.blue[200]:Screen.eventBlue, fontWeight: FontWeight.w600));}),
+                return Text('Send', style: TextStyle(color: asyncSnapshot.data==null || asyncSnapshot.data==''?Colors.blue[200]
+                :Colors.blue[600], fontWeight: FontWeight.w700, fontSize: 17.5));}),
             
               )
                         ]),
                     
 
-                         )
+                         ))
                     ),
       body: 
         Container(
