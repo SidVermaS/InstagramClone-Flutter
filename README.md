@@ -19,23 +19,23 @@ samples, guidance on mobile development, and a full API reference.
 This project is for educational purpose only.
 
 ### Screenshots
-Screenshot 1
+Screenshot 1<br/>
 <img src="./screenshots/Screenshot1.jpg" width="200" height="300">
 <br/>
 
-Screenshot 2
+Screenshot 2<br/>
 <img src="./screenshots/Screenshot2.jpg" width="200" height="300">
 <br/><br/>
 
-Screenshot 3
+Screenshot 3<br/>
 <img src="./screenshots/Screenshot3.jpg" width="200" height="300">
 <br/><br/>
 
-Screenshot 4
+Screenshot 4<br/>
 <img src="./screenshots/Screenshot4.jpg" width="200" height="300">
 <br/><br/>
 
-Screenshot 5
+Screenshot 5<br/>
 <img src="./screenshots/Screenshot5.jpg" width="200" height="300">
 
 ### Other Tech Stacks
