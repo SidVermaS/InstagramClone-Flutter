@@ -1,4 +1,5 @@
 import 'package:eventapp/blocs/comments_bloc/bloc.dart';
+import 'package:eventapp/blocs/direct_bloc/bloc.dart';
 import 'package:eventapp/blocs/home_bloc/bloc.dart';
 import 'package:eventapp/blocs/home_bloc/home_bloc.dart';
 import 'package:eventapp/blocs/home_bloc/home_event.dart';
@@ -7,6 +8,7 @@ import 'package:eventapp/models/post.dart';
 import 'package:eventapp/models/user.dart';
 import 'package:eventapp/networks/constant_base_urls.dart';
 import 'package:eventapp/screens/comments.dart';
+import 'package:eventapp/screens/main_menu/direct.dart';
 import 'package:eventapp/screens/main_menu/profile.dart';
 import 'package:eventapp/utils/app_widgets.dart';
 import 'package:eventapp/utils/change_cupertino_tab_bar.dart';
@@ -61,7 +63,7 @@ class _HomeState extends State<Home>{
             Image.asset('assets/images/instagram.png', height: 35,)
         ],),
         GestureDetector(child: Transform.rotate(angle: 31, child: Icon(Icons.send, color: Colors.black,)), onTap:  ()  {
-
+          navigateAndRefresh(BlocProvider(create: (context)=>DirectBloc(), child: Direct()));
         })
       ])),
       
@@ -211,12 +213,15 @@ class _HomeState extends State<Home>{
           ]));
     });
   }
-  void navigateAndRefresh(Widget widget, int index) async {
+  void navigateAndRefresh(Widget widget, [int index]) async {
     context.read<ChangeCupertinoTabBar>().toggle();
     int dynamicValue=await Screen.navigateAndRefresh(widget);
-    ModifyCommentsCountEvent(index: index, comments_count: dynamicValue);
+    if(dynamicValue!=null)  {
+      ModifyCommentsCountEvent(index: index, comments_count: dynamicValue);
+    }
     context.read<ChangeCupertinoTabBar>().toggle();
   }
+  
   void navigateToUser(User user) async  {
     BuildContext previousContext=Screen.context;
     await Screen.navigateAndRefresh(BlocProvider(create: (context)=>ProfileBloc(user: user.getUserDetails()), child: Profile(user: user.getUserDetails())));

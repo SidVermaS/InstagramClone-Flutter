@@ -43,7 +43,13 @@ class User  {
       'token': token,
     };
   }
-
+  Map<String, dynamic> toJsonDetails() {
+    return  {
+      'user_id': user_id,
+      'name': name,
+      'photo_url': photo_url,
+    };
+  }
 
   User getUserDetails() {
     return User(user_id: user_id, name: name, photo_url: photo_url);
