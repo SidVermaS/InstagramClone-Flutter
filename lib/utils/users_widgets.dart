@@ -64,7 +64,9 @@ class UsersWidget {
       }
     );
   }
-  void navigateToUser(User user)  {
-    Navigator.of(context).push(MaterialPageRoute(builder:(context)=>BlocProvider(create: (context)=>ProfileBloc(user: user.getUserDetails()), child: Profile(user: user.getUserDetails()))));
+  void navigateToUser(User user) async  {
+    BuildContext previousContext=Screen.context;
+    await Screen.navigateAndRefresh(BlocProvider(create: (context)=>ProfileBloc(user: user.getUserDetails()), child: Profile(user: user.getUserDetails())));
+    Screen.context=previousContext;
   }
 }

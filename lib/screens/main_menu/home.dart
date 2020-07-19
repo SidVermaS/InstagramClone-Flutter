@@ -2,9 +2,12 @@ import 'package:eventapp/blocs/comments_bloc/bloc.dart';
 import 'package:eventapp/blocs/home_bloc/bloc.dart';
 import 'package:eventapp/blocs/home_bloc/home_bloc.dart';
 import 'package:eventapp/blocs/home_bloc/home_event.dart';
+import 'package:eventapp/blocs/profile_bloc/bloc.dart';
 import 'package:eventapp/models/post.dart';
+import 'package:eventapp/models/user.dart';
 import 'package:eventapp/networks/constant_base_urls.dart';
 import 'package:eventapp/screens/comments.dart';
+import 'package:eventapp/screens/main_menu/profile.dart';
 import 'package:eventapp/utils/app_widgets.dart';
 import 'package:eventapp/utils/change_cupertino_tab_bar.dart';
 import 'package:eventapp/utils/global.dart';
@@ -142,14 +145,19 @@ class _HomeState extends State<Home>{
              child:Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
-                 Expanded(child: Row(
+                 Expanded(child: GestureDetector(
+                   onTap: ()  {
+                     navigateToUser(postsList[index].user);
+                   },
+                   behavior: HitTestBehavior.translucent,
+                   child: Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: <Widget>[
                  CircleAvatar(
-            backgroundImage: NetworkImage('${ConstantBaseUrls.photosPhotoBaseUrl}${postsList[index].user.photo_url}'),radius: 15.0),
+            backgroundImage: NetworkImage('${ConstantBaseUrls.usersPhotoBaseUrl}${postsList[index].user.photo_url}'),radius: 15.0),
             SizedBox(width: 11.5),
             appWidgets.getName(postsList[index].user.name)
-            ],)),
+            ],))),
             GestureDetector(behavior: HitTestBehavior.translucent, child:  Icon(Icons.more_vert, color: Colors.black), onTap: () {
               
             },),
@@ -208,5 +216,10 @@ class _HomeState extends State<Home>{
     int dynamicValue=await Screen.navigateAndRefresh(widget);
     ModifyCommentsCountEvent(index: index, comments_count: dynamicValue);
     context.read<ChangeCupertinoTabBar>().toggle();
+  }
+  void navigateToUser(User user) async  {
+    BuildContext previousContext=Screen.context;
+    await Screen.navigateAndRefresh(BlocProvider(create: (context)=>ProfileBloc(user: user.getUserDetails()), child: Profile(user: user.getUserDetails())));
+    Screen.context=previousContext;
   }
 }

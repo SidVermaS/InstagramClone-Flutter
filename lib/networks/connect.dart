@@ -13,7 +13,7 @@ class Connect {
   Map<String, String> headers;
   Connect() {
     if(Global.user!=null) {
-      headers= {
+      headers={
         "content-type": "application/json",
         'user_id': Global.user.user_id.toString(),
         'authorization':  Global.user.token,
