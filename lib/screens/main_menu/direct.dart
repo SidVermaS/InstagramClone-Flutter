@@ -74,7 +74,7 @@ class _DirectState extends State<Direct>  {
                
           decoration: BoxDecoration(borderRadius: BorderRadius.circular(30), border: Border.all(color: Colors.grey[400])),
                 margin: EdgeInsets.fromLTRB(0, 0, 0, 0),   
-                padding: EdgeInsets.fromLTRB(10, 0, 10, 5),
+                padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
                       child:
                       Row(
                         mainAxisAlignment: MainAxisAlignment.start,
@@ -92,7 +92,7 @@ class _DirectState extends State<Direct>  {
                             maxLines: 3,
                          decoration: InputDecoration(
                           border: InputBorder.none,
-                          contentPadding: EdgeInsets.all(0),
+                          contentPadding: EdgeInsets.fromLTRB(0,0,0,12.5),
                           labelText: 'Send a message...',
                           labelStyle:  TextStyle(color: Colors.grey[500], fontSize: 15.0),
                           hintText: 'Send a message...',
@@ -111,7 +111,7 @@ class _DirectState extends State<Direct>  {
                  initialData: '',
               stream: directBloc.messageTextStream,
               builder:  (BuildContext context, AsyncSnapshot<String> asyncSnapshot) {
-                return Text('Send', style: TextStyle(color: asyncSnapshot.data==null || asyncSnapshot.data==''?Colors.blue[200]
+                return Text('Send', style: TextStyle(color: asyncSnapshot.data==null || asyncSnapshot.data==''?Colors.blue[600]
                 :Colors.blue[600], fontWeight: FontWeight.w700, fontSize: 17.5));}),
             
               )

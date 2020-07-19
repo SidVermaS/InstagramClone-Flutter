@@ -157,11 +157,11 @@ class _ProfileState extends State<Profile>{
 
 
 
-     Container(margin: EdgeInsets.only(right: 35), child: Row(
+     Container(margin: EdgeInsets.only(right: 32.5), child: Row(
         mainAxisAlignment: MainAxisAlignment.start,
         children: <Widget>[    
           loadCounts(user.posts_count, 'Posts'),
-          SizedBox(width: 15),
+          SizedBox(width: 38),
           loadCounts(user.reactions_count, 'Reacts'),
         ]))
       ],),
