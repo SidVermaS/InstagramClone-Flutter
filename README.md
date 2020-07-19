@@ -20,19 +20,23 @@ This project is for educational purpose only.
 
 ### Screenshots
 Screenshot 1
-![Screenshot 1](./screenshots/Screenshot1.jpg =5x10)
+<img src="./screenshots/Screenshot1.jpg" width="20" height="50">
 <br/>
+
 Screenshot 2
-![Screenshot 2](./screenshots/Screenshot2.jpg =5x10)
+<img src="./screenshots/Screenshot2.jpg" width="20" height="50">
 <br/>
+
 Screenshot 3
-![Screenshot 3](./screenshots/Screenshot3.jpg =5x10)
+<img src="./screenshots/Screenshot3.jpg" width="20" height="50">
 <br/>
+
 Screenshot 4
-![Screenshot 4](./screenshots/Screenshot4.jpg =5x10)
+<img src="./screenshots/Screenshot4.jpg" width="20" height="50">
 <br/>
+
 Screenshot 5
-![Screenshot 5](./screenshots/Screenshot5.jpg =5x10)
+<img src="./screenshots/Screenshot5.jpg" width="20" height="50">
 
 ### Other Tech Stacks
 Web App: Vue.js
