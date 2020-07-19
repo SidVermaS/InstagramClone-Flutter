@@ -43,6 +43,7 @@ class DirectBloc extends Bloc<DirectEvent, DirectState> {
   Stream<DirectState> mapEventToState(DirectEvent event) async* {
     
     if(event is FetchDirectEvent)  {
+       print('~~~ FetchDirectEvent');
       yield* mapFetchDirectEventToState(event);
     } else if(event is SendMessageEvent)  {
       yield* mapSendMessageToState(event);
@@ -74,9 +75,10 @@ Stream<DirectState> mapFetchDirectEventToState(FetchDirectEvent event) async* {
   
   void listenMessages()async {
      channel.stream.listen((data) async {
-        print('~~~ data: ${data.runtimeType} $data');
+        print('~~~ data: ${data.runtimeType} $data len: ${messagesList.length}');
         messagesList.add(Message.fromJson(jsonDecode(data)));
-        FetchDirectEvent();
+        print('~~~ 2 len: ${messagesList.length}');
+        add(FetchDirectEvent());
       });
   }
 

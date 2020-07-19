@@ -89,14 +89,16 @@ class _DirectState extends State<Direct>  {
                   ),  
               ),
               GestureDetector(onTap: () {
-                // FocusScope.of(context).unfocus();
-                directBloc.add(SendMessageEvent());
+                if(directBloc.messageTextBehaviorSubject.value.trim().length>0) {
+                  FocusScope.of(context).unfocus();
+                  directBloc.add(SendMessageEvent());
+                }
               }, behavior: HitTestBehavior.translucent, child: 
                StreamBuilder<String>(
                  initialData: '',
               stream: directBloc.messageTextStream,
               builder:  (BuildContext context, AsyncSnapshot<String> asyncSnapshot) {
-                return Text('Send', style: TextStyle(color: asyncSnapshot.data==null || asyncSnapshot.data==''?Colors.blue[100]:Screen.eventBlue, fontWeight: FontWeight.w600));}),
+                return Text('Send', style: TextStyle(color: asyncSnapshot.data==null || asyncSnapshot.data==''?Colors.blue[200]:Screen.eventBlue, fontWeight: FontWeight.w600));}),
             
               )
                         ]),
@@ -140,7 +142,7 @@ class _DirectState extends State<Direct>  {
       return  ListView.builder(
                   itemCount:messagesList.length,
                   // physics: const NeverScrollableScrollPhysics(),
-                  // shrinkWrap: true,
+                  shrinkWrap: true,
                   itemBuilder: (BuildContext context, int index)  {
                     print('~~~~ lm');
                     return Container( margin: EdgeInsets.fromLTRB(0, 5, 0, 5),child: messagesList[index].user.user_id==Global.user.user_id?
@@ -148,30 +150,41 @@ class _DirectState extends State<Direct>  {
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: <Widget>[
                         Container(
-                          decoration: BoxDecoration(
-                            color: Colors.grey[300],
-                            borderRadius: BorderRadius.circular(15)
-                          ),
-                          padding: EdgeInsets.all(10),
-                          child: Text(messagesList[index].message_text, style: TextStyle(color: Colors.black)))
+                           padding: EdgeInsets.all(10),
+      decoration: BoxDecoration(
+        color: Colors.deepPurple[500],
+        borderRadius: BorderRadius.circular(20.0)
+      ),
+      constraints: BoxConstraints(
+        maxWidth: Screen.width * 0.7,
+      ),
+      child: Text(
+        messagesList[index].message_text,
+        style: TextStyle(color: Colors.white),
+      ),
+    ),
                       ],):Row( 
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: <Widget>[
-                        // ((messagesList.length-1)==index || messagesList[index].user.user_id!=messagesList[index+1].user.user_id)?Container(
-                        //     margin: EdgeInsets.only(right: 0),
-                        //     child: CircleAvatar(
-                        //     backgroundImage: NetworkImage('${ConstantBaseUrls.photosPhotoBaseUrl}${Global.user.photo_url}'),radius: 15.0)):Container( margin: EdgeInsets.only(right: 0),width:15, height: 15),
-
-                        // Expanded(child: 
                         Container(
-                          decoration: BoxDecoration(
-                          // color: Colors.deepPurple[400],
-                          borderRadius: BorderRadius.circular(15)
-                        ),
-                         
-                          padding: EdgeInsets.all(10),
-                          child: Text(messagesList[index].message_text, style: TextStyle(color: Colors.black)))
-                        // )    
+                            margin: EdgeInsets.only(right: 5),
+                            child: ((messagesList.length-1)==index || messagesList[index].user.user_id!=messagesList[index+1].user.user_id)?CircleAvatar(
+                            backgroundImage: NetworkImage('${ConstantBaseUrls.photosPhotoBaseUrl}${Global.user.photo_url}'),radius: 15.0):Container(decoration: BoxDecoration(shape: BoxShape.circle,) ,width:30, height: 15)),
+
+                          Container(
+                            padding: EdgeInsets.all(10),
+          decoration: BoxDecoration(
+        color: Colors.grey[300],
+        borderRadius: BorderRadius.circular(20.0)
+      ),
+          constraints: BoxConstraints(
+            maxWidth: Screen.width * 0.7,
+          ),
+          child: Text(
+            messagesList[index].message_text,
+            style: TextStyle(color: Colors.black),
+          ),
+        ),
                       ],));
                   }
                   );
