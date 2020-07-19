@@ -1,5 +1,6 @@
 import 'package:eventapp/blocs/gallery_bloc/bloc.dart';
 import 'package:eventapp/blocs/photo_bloc/bloc.dart';
+import 'package:eventapp/utils/screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -18,6 +19,7 @@ class _AddPostState extends State<AddPost> with SingleTickerProviderStateMixin  
     AppWidgets _appWidgets=AppWidgets();
   void initState()  {
     super.initState();
+    
     _tabController=TabController(vsync: this, length: 2);
   }
   void dispose()  {

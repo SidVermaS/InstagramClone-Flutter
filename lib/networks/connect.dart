@@ -10,14 +10,24 @@ import 'package:http_parser/http_parser.dart';
 import 'package:mime_type/mime_type.dart';
 
 class Connect {
+  Map<String, String> headers;
+  Connect() {
+    if(Global.user!=null) {
+      headers= {
+        "content-type": "application/json",
+        'user_id': Global.user.user_id.toString(),
+        'authorization':  Global.user.token,
+      };
+    }
+  }     
   Future<http.Response> sendPostWithouttoken(
       String url, Map<String, dynamic> bodyMap) async {
     print(
-        '~~~ url: ${ConstantBaseUrls.baseUrl}$url bodyMap: ${json.encode(bodyMap)}');
+        '~~~ url: ${ConstantBaseUrls.baseUrl}$url bodyMap: ${jsonEncode(bodyMap)}');
     http.Response response = await http.post('${ConstantBaseUrls.baseUrl}$url',
-        body: json.encode(bodyMap),
+        body: jsonEncode(bodyMap),
         headers: {
-          "Content-Type": "application/json",
+          "content-type": "application/json",
         });
     debugPrint('~~~ response: ${response.body}');
     return response;
@@ -26,13 +36,9 @@ class Connect {
   Future<http.Response> sendGet(
       String url) async {
     print(
-        '~~~ url: ${ConstantBaseUrls.baseUrl}$url');
+        '~~~ url: ${ConstantBaseUrls.baseUrl}$url headers: $headers');
     http.Response response = await http.get('${ConstantBaseUrls.baseUrl}$url',
-        headers: {
-          "Content-Type": "application/json",
-          'user_id': Global.user.user_id.toString(),
-          'authorization':  Global.user.token,
-        });
+        headers: headers);
     print('~~~ statusCode: ${response.statusCode}');
     debugPrint('~~~ response: ${response.body}');
     return response;
@@ -40,56 +46,44 @@ class Connect {
   Future<http.Response> sendPost(
       String url, Map<String, dynamic> bodyMap) async {
     print(
-        '~~~ url: ${ConstantBaseUrls.baseUrl}$url bodyMap: ${json.encode(bodyMap)} ${ Global.user.token}');
+        '~~~ url: ${ConstantBaseUrls.baseUrl}$url headers: ${headers} bodyMap: ${jsonEncode(bodyMap)} ${ Global.user.token}');
     http.Response response = await http.post('${ConstantBaseUrls.baseUrl}$url',
-        body: json.encode(bodyMap),
+        body: jsonEncode(bodyMap),
         headers: {
-          "Content-Type": "application/json",
-          'user_id': Global.user.user_id.toString(),
-          'authorization':  Global.user.token,
-        });
+        "content-type": "application/json",
+        'user_id': Global.user.user_id.toString(),
+        'authorization':  Global.user.token,
+      });
     debugPrint('~~~ response: ${response.body}');
     return response;
   }
   Future<http.Response> sendPatch(
       String url, Map<String, dynamic> bodyMap) async {
     print(
-        '~~~ url: ${ConstantBaseUrls.baseUrl}$url bodyMap: ${json.encode(bodyMap)} ${ Global.user.token}');
+        '~~~ url: ${ConstantBaseUrls.baseUrl}$url bodyMap: ${jsonEncode(bodyMap)} ${ Global.user.token}');
     http.Response response = await http.patch('${ConstantBaseUrls.baseUrl}$url',
-        body: json.encode(bodyMap),
-        headers: {
-          "Content-Type": "application/json",
-          'user_id': Global.user.user_id.toString(),
-          'authorization':  Global.user.token,
-        });
+        body: jsonEncode(bodyMap),
+        headers: headers);
     debugPrint('~~~ response: ${response.body}');
     return response;
   }
   Future<http.Response> sendDelete(
       String url, Map<String, dynamic> bodyMap) async {
     print(
-        '~~~ url: ${ConstantBaseUrls.baseUrl}$url bodyMap: ${json.encode(bodyMap)} ${ Global.user.token}');
+        '~~~ url: ${ConstantBaseUrls.baseUrl}$url bodyMap: ${jsonEncode(bodyMap)} ${ Global.user.token}');
     http.Response response = await http.delete('${ConstantBaseUrls.baseUrl}$url',
 
-        headers: {
-          "Content-Type": "application/json",
-          'user_id': Global.user.user_id.toString(),
-          'authorization':  Global.user.token,
-        });
+        headers: headers);
     debugPrint('~~~ response: ${response.body}');
     return response;
   }
   Future<http.Response> sendPut(
       String url, Map<String, dynamic> bodyMap) async {
     print(
-        '~~~ url: ${ConstantBaseUrls.baseUrl}$url bodyMap: ${json.encode(bodyMap)}');
+        '~~~ url: ${ConstantBaseUrls.baseUrl}$url bodyMap: ${jsonEncode(bodyMap)}');
     http.Response response = await http.put('${ConstantBaseUrls.baseUrl}$url',
-        body: json.encode(bodyMap),
-        headers: {
-          "Content-Type": "application/json",
-          'user_id': Global.user.user_id.toString(),
-          'authorization':  Global.user.token,
-        });
+        body: jsonEncode(bodyMap),
+        headers: headers);
     debugPrint('~~~ response: ${response.body}');
     return response;
   }
@@ -109,16 +103,12 @@ class Connect {
 
     // FormData formData=FormData();
     // formData.files.add(MapEntry('file', MultipartFile.fromBytes(file.readAsBytesSync(), filename: '${DateTime.now().millisecondsSinceEpoch}.jpg',contentType: MediaType(mime0,type0))));
+    
     Dio dio=Dio();
-    print('~~~ after parse');
-    Response<dynamic> response =await dio.post('${ConstantBaseUrls.baseUrl}$url', data: formData,); 
-    // await http.post('${ConstantBaseUrls.baseUrl}$url',
-    //     body: formData,
-    //     headers: {
-    //       // "Content-Type": "application/json",
-    //       'user_id': Global.user.user_id.toString(),
-    //       'authorization':  Global.user.token,
-    //     });
+    final Options options=Options(
+      headers: headers);
+    Response<dynamic> response =await dio.post('${ConstantBaseUrls.baseUrl}$url', data: formData, options: options); 
+  
     debugPrint('~~~ response: ${response.data}');
     return response;
   }

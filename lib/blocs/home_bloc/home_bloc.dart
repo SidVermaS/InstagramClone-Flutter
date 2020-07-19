@@ -66,9 +66,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   Stream<HomeState> mapModifyEventToState(ModifyFavoriteEvent event) async* {
         
         try {
-          print('1: ${postsList[event.index].status}');
           postsList[event.index].status=postsList[event.index].status=='like'?'remove':'like';
-          print('2: ${postsList[event.index].status}');
          if(postsList[event.index].status=='like')  {
            postsList[event.index].reactions_count++;
          }  else  {

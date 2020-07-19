@@ -33,9 +33,9 @@ class _PhotoState extends State<Photo>  {
   }
   Widget build(BuildContext context)  {
     return 
-    // WillPopScope(
-    //   onWillPop: _onWillPop,
-    //   child: 
+    WillPopScope(
+      onWillPop: ()async=>false,
+      child: 
       Scaffold(
       body: Container(
         child: ListView(children:<Widget>[
@@ -67,7 +67,7 @@ class _PhotoState extends State<Photo>  {
         })
         ) ])
          
-        
+        )
         )
         );
   }

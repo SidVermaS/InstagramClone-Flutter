@@ -53,7 +53,7 @@ class _ProfileState extends State<Profile>{
       navigationBar: CupertinoNavigationBar(
         
         leading: showBackButton?GestureDetector(behavior: HitTestBehavior.translucent, onTap: ()  {
-          _onWillPop();
+          Navigator.of(context).pop();
         }, child: Icon(Icons.arrow_back, color: Colors.black)):SizedBox(width: 0, height: 0),
         middle:Container(margin: EdgeInsets.only(left: 8), child: Row(mainAxisAlignment: MainAxisAlignment.start, children:<Widget>[
           

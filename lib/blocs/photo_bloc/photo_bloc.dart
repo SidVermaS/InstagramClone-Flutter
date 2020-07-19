@@ -5,6 +5,7 @@ import 'package:camera/camera.dart';
 import 'package:eventapp/blocs/new_post_bloc/bloc.dart';
 import 'package:eventapp/screens/new_post.dart';
 import 'package:eventapp/utils/screen.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:path_provider/path_provider.dart';
 
@@ -50,16 +51,21 @@ class PhotoBloc extends Bloc<PhotoEvent, PhotoState>  {
 
   Stream<PhotoState> mapTakePhotoEventToState(TakePhoto event) async*  {
      try {
-       Directory directory=await getApplicationDocumentsDirectory();
-       String directoryPath='${directory.path}/uploads';
-       await Directory(directoryPath).create(recursive: true);
-        String filePath='${directory.path}/${DateTime.now().millisecondsSinceEpoch}.jpg';
-      
-        await cameraController.takePicture(filePath);
-        Screen.navigateToPage(BlocProvider(create:(context)=>NewPostBloc(), child: NewPost(file: File(filePath))));
-    } catch(e)  {
+      Directory directory=await getApplicationDocumentsDirectory();
+      String directoryPath='${directory.path}/uploads';
+      await Directory(directoryPath).create(recursive: true);
+      String filePath='${directory.path}/${DateTime.now().millisecondsSinceEpoch}.jpg';
+    
+      await cameraController.takePicture(filePath);
+      navigateToNewPost(filePath);
+     } catch(e)  {
       print('~~~ e: ${e.toString()}');
       yield TakePhotoErrorState(message: e.toString(), cameraController: cameraController);
     }  
+  }
+  void navigateToNewPost(String filePath) async  {
+    BuildContext previousContext=Screen.context;
+    await Screen.navigateAndRefresh(BlocProvider(create:(context)=>NewPostBloc(), child: NewPost(file: File(filePath))));
+    Screen.context=previousContext;      
   }
 }

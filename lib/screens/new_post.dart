@@ -28,14 +28,16 @@ class _NewPostState extends State<NewPost>  {
   }
   void dispose()  {
     super.dispose();
+    newPostBloc.dispose();
     newPostBloc.close();
   }
   Future<bool> _onWillPop() async {
-    return true;
+    Screen.navigatePop();
+    return false;
   }
   Widget build(BuildContext context)  {
     return WillPopScope(
-      onWillPop: _onWillPop,
+      onWillPop: () async=>false,
       child: Scaffold(
         appBar: AppBar(
                   centerTitle: false,
@@ -44,6 +46,7 @@ class _NewPostState extends State<NewPost>  {
                 },),
                 title: Container( child: Text('New Post', style: TextStyle(fontSize: 20),)),
                 actions: <Widget>[FlatButton(onPressed: () {
+                  FocusScope.of(context).unfocus();
                  if(newPostBloc.captionBehaviorSubject.value.length<4) {
                    Screen.showToast('Caption should have atleast 4 characters');
                  }  else  {
@@ -70,7 +73,7 @@ class _NewPostState extends State<NewPost>  {
                 margin: EdgeInsets.fromLTRB(15,18,15,18),
                 child: TextField(
                 onChanged: (val)=>newPostBloc.captionStreamSink.add(val),
-                // controller: _commentTextEditingController,
+                controller: newPostBloc.captionTextEditingController,
                 minLines: 1,
                 maxLines: null,
                 decoration: InputDecoration(

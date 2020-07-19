@@ -29,7 +29,9 @@ class _GalleryState extends State<Gallery>  {
     appWidgets.context=context;
     Screen.context=context;
     galleryBloc=BlocProvider.of<GalleryBloc>(context);
-    galleryBloc.add(FetchGalleryEvent());
+    Future.delayed(Duration.zero, ()  {
+      galleryBloc.add(FetchGalleryEvent());
+    });
   }
   void dispose()  {
     super.dispose();
@@ -37,9 +39,9 @@ class _GalleryState extends State<Gallery>  {
   }
   Widget build(BuildContext context)  {
     return 
-    // WillPopScope(
-    //   onWillPop: _onWillPop,
-    //   child: 
+    WillPopScope(
+      onWillPop: ()async=>false,
+      child: 
       Scaffold(
       body: Container(
         child: BlocListener<GalleryBloc, GalleryState>(
@@ -62,8 +64,8 @@ class _GalleryState extends State<Gallery>  {
                 },),
                 title: Container(transform: Matrix4.translationValues(-25, 0,0), child: Text('Gallery')),
                 actions: <Widget>[FlatButton(onPressed: () {
- Screen.navigateToPage(BlocProvider(create:(context)=>NewPostBloc(), child: NewPost(file: File(galleryBloc.imagesList[galleryBloc.index].toString()))));
-              },child: Text('Next', style: TextStyle(color: Screen.eventBlue, fontSize: 16.5)))],)),
+                  navigateToNewPost();
+               },child: Text('Next', style: TextStyle(color: Screen.eventBlue, fontSize: 16.5)))],)),
               Stack(children:<Widget>[Image.file(File(state.imagesList[state.index].toString()), fit: BoxFit.cover, width: double.infinity, height: Screen.height*0.4),
               Positioned(bottom: 7, right: 10, child: ButtonTheme(height: 32, child: RaisedButton.icon(shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)), color: Colors.black38, onPressed: () {}, icon: Icon(Icons.image,color: Colors.white, size: 16), label: Text('SELECT IMAGE', style: TextStyle(color: Colors.white, fontWeight: FontWeight.w400, fontSize: 13))))),
               ]),
@@ -89,7 +91,12 @@ class _GalleryState extends State<Gallery>  {
           }
           return appWidgets.getCircularProgressIndicator();
         })))
-        // )
+        )
         );
+  }
+  void navigateToNewPost() async  {
+    BuildContext previousContext=Screen.context;
+ await Screen.navigateAndRefresh(BlocProvider(create:(context)=>NewPostBloc(), child: NewPost(file: File(galleryBloc.imagesList[galleryBloc.index].toString()))));
+       Screen.context=previousContext;      
   }
 }
