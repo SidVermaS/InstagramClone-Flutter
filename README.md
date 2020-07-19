@@ -21,16 +21,16 @@ This project is for educational purpose only.
 ### Screenshots
 Screenshot 1
 ![Screenshot 1](./screenshots/Screenshot1.jpg)
-
+<br/>
 Screenshot 2
 ![Screenshot 2](./screenshots/Screenshot2.jpg)
-
+<br/>
 Screenshot 3
 ![Screenshot 3](./screenshots/Screenshot3.jpg)
-
+<br/>
 Screenshot 4
 ![Screenshot 4](./screenshots/Screenshot4.jpg)
-
+<br/>
 Screenshot 5
 ![Screenshot 5](./screenshots/Screenshot5.jpg)
 
