@@ -25,15 +25,15 @@ Screenshot 1
 
 Screenshot 2
 <img src="./screenshots/Screenshot2.jpg" width="200" height="300">
-<br/>
+<br/><br/>
 
 Screenshot 3
 <img src="./screenshots/Screenshot3.jpg" width="200" height="300">
-<br/>
+<br/><br/>
 
 Screenshot 4
 <img src="./screenshots/Screenshot4.jpg" width="200" height="300">
-<br/>
+<br/><br/>
 
 Screenshot 5
 <img src="./screenshots/Screenshot5.jpg" width="200" height="300">
