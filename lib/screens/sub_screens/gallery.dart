@@ -62,7 +62,7 @@ class _GalleryState extends State<Gallery>  {
                 leading: GestureDetector( child: Icon(Icons.close, size: 30, color: Colors.black54),onTap: ()  {
                   backVoidCallback();
                 },),
-                title: Container(transform: Matrix4.translationValues(-25, 0,0), child: Text('Gallery')),
+                title: Container(transform: Matrix4.translationValues(-5, 0,0), child: Text('Gallery')),
                 actions: <Widget>[FlatButton(onPressed: () {
                   navigateToNewPost();
                },child: Text('Next', style: TextStyle(color: Screen.eventBlue, fontSize: 16.5)))],)),
