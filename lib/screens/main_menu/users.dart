@@ -10,6 +10,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:lazy_load_scrollview/lazy_load_scrollview.dart';
 import 'package:shimmer/shimmer.dart';
 
 class Users extends StatefulWidget {
@@ -96,7 +97,10 @@ class _UsersState extends State<Users>{
   }
   
   Widget loadUsers(List<User> usersList)  {
-    return ListView.builder(
+    return LazyLoadScrollView(
+      onEndOfPage: ()=>usersBloc.add(FetchUsersEvent()),
+      scrollOffset: 85,
+      child: ListView.builder(
       itemCount: usersList.length,
       itemBuilder: (BuildContext context, int index)  {
         return Container(
@@ -125,7 +129,7 @@ class _UsersState extends State<Users>{
           ])
         );
       }
-    );
+    ));
   }
   void navigateToUser(User user) async  {
     BuildContext previousContext=Screen.context;

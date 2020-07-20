@@ -11,6 +11,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:lazy_load_scrollview/lazy_load_scrollview.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class Explore extends StatefulWidget {
@@ -64,12 +65,15 @@ class _ExploreState extends State<Explore>{
     ))));
   }
   Widget _loadPosts(List<Post> postsList)  {
-    return GridView.builder(
+    return LazyLoadScrollView(
+      onEndOfPage: ()=>exploreBloc.add(FetchExploreEvent()),
+      scrollOffset: 85,
+      child: GridView.builder(
       itemCount: postsList.length, 
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3, mainAxisSpacing: 1.5, crossAxisSpacing: 1.5),
       itemBuilder: (BuildContext context, int index)  {
         return GridTile(child: Image.network('${ConstantBaseUrls.photosPhotoBaseUrl}${postsList[index].photo_url}', fit: BoxFit.cover));
       }
-    );
+    ));
   }
 }

@@ -7,6 +7,7 @@ import 'package:eventapp/utils/screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:lazy_load_scrollview/lazy_load_scrollview.dart';
 
 import 'package:provider/provider.dart';
 
@@ -54,7 +55,10 @@ class _GalleryState extends State<Gallery>  {
         builder: (context, state) { 
           if(state is GalleryLoadedState) {
 
-            return ListView(children:<Widget>[
+            return LazyLoadScrollView(
+      onEndOfPage: ()=>galleryBloc.add(FetchGalleryEvent()),
+      scrollOffset: 85,
+      child: ListView(children:<Widget>[
               Container(
                height: 45,
                 child: AppBar(
@@ -63,7 +67,8 @@ class _GalleryState extends State<Gallery>  {
                   backVoidCallback();
                 },),
                 title: Container(transform: Matrix4.translationValues(-5, 0,0), child: Text('Gallery')),
-                actions: <Widget>[FlatButton(onPressed: () {
+                actions: <Widget>[
+                  FlatButton(onPressed: () {
                   navigateToNewPost();
                },child: Text('Next', style: TextStyle(color: Screen.eventBlue, fontSize: 16.5)))],)),
               Stack(children:<Widget>[Image.file(File(state.imagesList[state.index].toString()), fit: BoxFit.cover, width: double.infinity, height: Screen.height*0.4),
@@ -87,7 +92,8 @@ class _GalleryState extends State<Gallery>  {
                     fit: BoxFit.cover,
                     image: FileImage(File(state.imagesList[index].toString()))))));
                 }
-              )]);
+              )
+              ]));
           }
           return appWidgets.getCircularProgressIndicator();
         })))

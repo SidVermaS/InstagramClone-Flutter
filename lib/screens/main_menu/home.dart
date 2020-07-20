@@ -18,6 +18,7 @@ import 'package:eventapp/utils/shared_pref_manager.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:lazy_load_scrollview/lazy_load_scrollview.dart';
 import 'package:outline_material_icons/outline_material_icons.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -134,7 +135,10 @@ class _HomeState extends State<Home>{
               );
   }
   Widget loadPosts(List<Post> postsList) {
-    return ListView.builder(
+    return LazyLoadScrollView(
+      onEndOfPage: ()=>homeBloc.add(FetchHomeEvent()),
+      scrollOffset: 85,
+      child: ListView.builder(
       // shrinkWrap: true,
       itemCount: postsList.length,
       itemBuilder: (BuildContext context, int index)  {
@@ -212,7 +216,7 @@ class _HomeState extends State<Home>{
             
             ]))
           ]));
-    });
+    }));
   }
   void navigateAndRefresh(Widget widget, [int index]) async {
     context.read<ChangeCupertinoTabBar>().toggle();
