@@ -38,9 +38,12 @@ Screenshot 4<br/>
 Screenshot 5<br/>
 <img src="./screenshots/Screenshot5.jpg" width="225" height="400">
 
-### Other Tech Stacks
+### Tech Stacks
 Web App: Vue.js
 https://github.com/SiddharthVermaS/InstagramClone-VueJS
+
+Mobile App: Flutter
+https://github.com/SiddharthVermaS/InstagramClone-Flutter
 
 Backend: Node.js
 https://github.com/SiddharthVermaS/InstagramClone-NodeJs-MySQL
