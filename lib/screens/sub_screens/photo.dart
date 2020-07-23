@@ -18,13 +18,13 @@ class Photo extends StatefulWidget  {
 class _PhotoState extends State<Photo>  {
   VoidCallback backVoidCallback;
   _PhotoState({this.backVoidCallback});
-  AppWidgets appWidgets=AppWidgets();
   PhotoBloc photoBloc;
   void initState()  {
     super.initState();
-    appWidgets.context=context;
+   
     Screen.context=context;
     photoBloc=BlocProvider.of<PhotoBloc>(context);
+    photoBloc.appWidgets.context=context;
     photoBloc.add(GetAvailableCameras());
   }
   void dispose()  {
@@ -63,7 +63,7 @@ class _PhotoState extends State<Photo>  {
           } else if(state is TakePhotoErrorState)  {
             return showCamera(state.cameraController);
           }
-          return appWidgets.getCircularProgressIndicator();
+          return photoBloc.appWidgets.getCircularProgressIndicator();
         })
         ) ])
          

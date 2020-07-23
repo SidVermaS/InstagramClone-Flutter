@@ -17,11 +17,11 @@ class NewPost extends StatefulWidget  {
 } 
 
 class _NewPostState extends State<NewPost>  {
-  AppWidgets appWidgets=AppWidgets();
+  
   NewPostBloc newPostBloc;
   void initState()  {
     super.initState();
-    appWidgets.context=context;
+    newPostBloc.appWidgets.context=context;
     Screen.context=context;
     newPostBloc=BlocProvider.of<NewPostBloc>(context);
     newPostBloc.add(FetchPhotoEvent(file: widget.file));
@@ -32,7 +32,7 @@ class _NewPostState extends State<NewPost>  {
     newPostBloc.close();
   }
   Future<bool> _onWillPop() async {
-    Screen.navigatePop();
+    newPostBloc.appWidgets.navigatePop();
     return false;
   }
   Widget build(BuildContext context)  {
@@ -91,7 +91,7 @@ class _NewPostState extends State<NewPost>  {
             ]);
           }
           }
-          return appWidgets.getCircularProgressIndicator();
+          return newPostBloc.appWidgets.getCircularProgressIndicator();
         })))));
   }
 }

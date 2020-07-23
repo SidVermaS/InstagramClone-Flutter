@@ -23,11 +23,10 @@ class Gallery extends StatefulWidget  {
 class _GalleryState extends State<Gallery>  {
    VoidCallback backVoidCallback;
   _GalleryState({this.backVoidCallback});
-  AppWidgets appWidgets=AppWidgets();
   GalleryBloc galleryBloc;
   void initState()  {
     super.initState();
-    appWidgets.context=context;
+    galleryBloc.appWidgets.context=context;
     Screen.context=context;
     galleryBloc=BlocProvider.of<GalleryBloc>(context);
     Future.delayed(Duration.zero, ()  {
@@ -95,14 +94,12 @@ class _GalleryState extends State<Gallery>  {
               )
               ]));
           }
-          return appWidgets.getCircularProgressIndicator();
+          return galleryBloc.appWidgets.getCircularProgressIndicator();
         })))
         )
         );
   }
   void navigateToNewPost() async  {
-    BuildContext previousContext=Screen.context;
- await Screen.navigateAndRefresh(BlocProvider(create:(context)=>NewPostBloc(), child: NewPost(file: File(galleryBloc.imagesList[galleryBloc.index].toString()))));
-       Screen.context=previousContext;      
-  }
+  await galleryBloc.appWidgets.navigateAndRefresh(BlocProvider(create:(context)=>NewPostBloc(), child: NewPost(file: File(galleryBloc.imagesList[galleryBloc.index].toString()))));
+ }
 }

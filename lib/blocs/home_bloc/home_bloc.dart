@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:eventapp/networks/constant_sub_urls.dart';
+import 'package:eventapp/utils/app_widgets.dart';
 import 'package:eventapp/utils/global.dart';
 import 'package:http/http.dart' as http;
 import 'package:bloc/bloc.dart';
@@ -20,6 +21,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   List<Post> postsList=List<Post>(); 
   Map<String, dynamic> bodyMap;
   URLQueryParams queryParams=URLQueryParams();
+  AppWidgets appWidgets=AppWidgets();
   Stream<HomeState> mapEventToState(HomeEvent event) async* {   
       
       if(event is FetchHomeEvent)  { 

@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:camera/camera.dart';
 import 'package:eventapp/blocs/new_post_bloc/bloc.dart';
 import 'package:eventapp/screens/new_post.dart';
+import 'package:eventapp/utils/app_widgets.dart';
 import 'package:eventapp/utils/screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -19,6 +20,7 @@ class PhotoBloc extends Bloc<PhotoEvent, PhotoState>  {
 
   CameraController cameraController; 
   List<CameraDescription> cameraDescriptionsList;
+  AppWidgets appWidgets=AppWidgets();
   void dispose()  {
     cameraController?.dispose();
   }
@@ -64,8 +66,7 @@ class PhotoBloc extends Bloc<PhotoEvent, PhotoState>  {
     }  
   }
   void navigateToNewPost(String filePath) async  {
-    BuildContext previousContext=Screen.context;
-    await Screen.navigateAndRefresh(BlocProvider(create:(context)=>NewPostBloc(), child: NewPost(file: File(filePath))));
-    Screen.context=previousContext;      
+    await appWidgets.navigateAndRefresh(BlocProvider(create:(context)=>NewPostBloc(), child: NewPost(file: File(filePath))));
+     
   }
 }

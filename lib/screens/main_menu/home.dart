@@ -32,12 +32,11 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home>{
-  AppWidgets appWidgets=AppWidgets();
   HomeBloc homeBloc;
 
   void initState()  {
     super.initState();
-    appWidgets.context=context;
+    homeBloc.appWidgets.context=context;
     Screen.context=context;
   
 
@@ -163,7 +162,7 @@ class _HomeState extends State<Home>{
                  CircleAvatar(
             backgroundImage: NetworkImage('${ConstantBaseUrls.usersPhotoBaseUrl}${postsList[index].user.photo_url}'),radius: 15.0),
             SizedBox(width: 11.5),
-            appWidgets.getName(postsList[index].user.name)
+            homeBloc.appWidgets.getName(postsList[index].user.name)
             ],))),
             GestureDetector(behavior: HitTestBehavior.translucent, child:  Icon(Icons.more_vert, color: Colors.black), onTap: () {
               
@@ -201,7 +200,7 @@ class _HomeState extends State<Home>{
              child: Column(
                crossAxisAlignment: CrossAxisAlignment.start,
                children:<Widget>  [
-            appWidgets.getName('${postsList[index].reactions_count} reacts'),
+            homeBloc.appWidgets.getName('${postsList[index].reactions_count} reacts'),
            Container(
              margin: EdgeInsets.fromLTRB(0, 5, 0, 5),
              child: RichText(text: TextSpan(text: '${postsList[index].user.name} ', style: TextStyle(color: Colors.black, fontSize: 15, fontWeight: FontWeight.bold), children:<TextSpan>[
@@ -221,7 +220,7 @@ class _HomeState extends State<Home>{
   void navigateAndRefresh(Widget widget, [int index]) async {
     context.read<ChangeCupertinoTabBar>().toggle();
      BuildContext previousContext=Screen.context;
-    int dynamicValue=await Screen.navigateAndRefresh(widget);
+    int dynamicValue=await homeBloc.appWidgets.navigateAndRefresh(widget);
     Screen.context=previousContext;
     if(dynamicValue!=null)  {
       ModifyCommentsCountEvent(index: index, comments_count: dynamicValue);
@@ -230,8 +229,7 @@ class _HomeState extends State<Home>{
   }
   
   void navigateToUser(User user) async  {
-    BuildContext previousContext=Screen.context;
-    await Screen.navigateAndRefresh(BlocProvider(create: (context)=>ProfileBloc(user: user.getUserDetails()), child: Profile(user: user.getUserDetails())));
-    Screen.context=previousContext;
+    await homeBloc.appWidgets.navigateAndRefresh(BlocProvider(create: (context)=>ProfileBloc(user: user.getUserDetails()), child: Profile(user: user.getUserDetails())));
+  
   }
 }

@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:eventapp/blocs/users_bloc/bloc.dart';
 import 'package:eventapp/models/user.dart';
 import 'package:eventapp/networks/constant_sub_urls.dart';
+import 'package:eventapp/utils/app_widgets.dart';
 import 'package:eventapp/utils/global.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:http/http.dart' as http;
@@ -19,7 +20,7 @@ class UsersBloc extends Bloc<UsersEvent, UsersState>  {
   bool notLoading=true;
   int page=-1;
   URLQueryParams queryParams=URLQueryParams();
-
+  AppWidgets appWidgets=AppWidgets();
   Stream<UsersState> mapEventToState(UsersEvent event) async* {
     if(event is FetchUsersEvent)  {
       if(notLoading)  {

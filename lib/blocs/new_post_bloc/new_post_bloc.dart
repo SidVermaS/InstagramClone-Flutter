@@ -7,6 +7,7 @@ import 'package:dio/dio.dart';
 import 'package:eventapp/networks/connect.dart';
 import 'package:eventapp/networks/constant_sub_urls.dart';
 import 'package:eventapp/screens/main_menu/index.dart';
+import 'package:eventapp/utils/app_widgets.dart';
 import 'package:eventapp/utils/change_cupertino_tab_bar.dart';
 import 'package:eventapp/utils/global.dart';
 import 'package:flutter/cupertino.dart';
@@ -26,6 +27,7 @@ class NewPostBloc extends Bloc<NewPostEvent, NewPostState>  {
   File file;
   Connect _connect=Connect();
   URLQueryParams queryParams=URLQueryParams();  
+  AppWidgets appWidgets=AppWidgets();
   final TextEditingController captionTextEditingController=TextEditingController();
   final BehaviorSubject<String> captionBehaviorSubject=BehaviorSubject<String>();
   Stream<String> get captionStream=>captionBehaviorSubject.stream;

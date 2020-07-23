@@ -3,9 +3,7 @@ import 'package:eventapp/blocs/users_bloc/bloc.dart';
 import 'package:eventapp/models/user.dart';
 import 'package:eventapp/networks/constant_base_urls.dart';
 import 'package:eventapp/screens/main_menu/profile.dart';
-import 'package:eventapp/utils/app_widgets.dart';
 import 'package:eventapp/utils/screen.dart';
-import 'package:eventapp/utils/users_widgets.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -18,19 +16,18 @@ class Users extends StatefulWidget {
 }
 
 class _UsersState extends State<Users>{
-  AppWidgets appWidgets=AppWidgets();
-  // UsersWidget usersWidget=UsersWidget();
   UsersBloc usersBloc;
 
   void initState()  {
     super.initState();
     // usersWidget.context=context;
-    appWidgets.context=context;
+    
 
     Screen.context=context;
   
 
     usersBloc=BlocProvider.of<UsersBloc>(context);
+    usersBloc.appWidgets.context=context;
     usersBloc.add(FetchUsersEvent());
   }
   void dispose()  {
@@ -41,7 +38,7 @@ class _UsersState extends State<Users>{
   Widget build(BuildContext context)  {
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
-        middle:Container(margin: EdgeInsets.only(left: 8), child: Row(mainAxisAlignment: MainAxisAlignment.start, children:<Widget>[appWidgets.getPageTitle('Users')])),
+        middle:Container(margin: EdgeInsets.only(left: 8), child: Row(mainAxisAlignment: MainAxisAlignment.start, children:<Widget>[usersBloc.appWidgets.getPageTitle('Users')])),
       
       ),
       child: Container(
@@ -132,9 +129,7 @@ class _UsersState extends State<Users>{
     ));
   }
   void navigateToUser(User user) async  {
-    BuildContext previousContext=Screen.context;
-    await Screen.navigateAndRefresh(BlocProvider(create: (context)=>ProfileBloc(user: user.getUserDetails()), child: Profile(user: user.getUserDetails())));
-    Screen.context=previousContext;
+    await usersBloc.appWidgets.navigateAndRefresh(BlocProvider(create: (context)=>ProfileBloc(user: user.getUserDetails()), child: Profile(user: user.getUserDetails())));
   }
 
 

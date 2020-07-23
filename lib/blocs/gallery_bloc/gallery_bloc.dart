@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:eventapp/networks/constant_sub_urls.dart';
+import 'package:eventapp/utils/app_widgets.dart';
 import 'package:eventapp/utils/global.dart';
 import 'package:http/http.dart' as http;
 import 'package:bloc/bloc.dart';
@@ -18,7 +19,7 @@ class GalleryBloc extends Bloc<GalleryEvent, GalleryState>  {
 
   int index=0, page=-18, limit=18;
   List uriList=List(),imagesList=List();
-
+  AppWidgets appWidgets=AppWidgets();
   Stream<GalleryState> mapEventToState(GalleryEvent event) async* {
     if(event is FetchGalleryEvent)  {
       try {

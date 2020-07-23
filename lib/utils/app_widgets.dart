@@ -45,5 +45,17 @@ class AppWidgets  {
   Widget getPageTitle(String text)  {
     return Text(text, style: TextStyle(color: Colors.black, fontWeight: FontWeight.w600 , fontSize: 18));
   }
-
+  
+  void navigateToPage(Widget widget)  {
+    Navigator.of(context).push(MaterialPageRoute(builder: (context)=>widget));
+  }
+  Future<dynamic> navigateAndRefresh(Widget widget) async {
+    return await Navigator.of(context).push(MaterialPageRoute(builder:(context)=>widget));    
+  }
+  void navigateRemoveUntil(Widget widget)  {
+    Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder:(context)=>widget),(Route<dynamic> route)=>false);
+  } 
+  void navigatePop()  {
+    Navigator.of(context).pop();
+  }
 }
