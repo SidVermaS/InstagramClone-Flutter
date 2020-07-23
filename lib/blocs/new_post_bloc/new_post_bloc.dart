@@ -81,7 +81,7 @@ class NewPostBloc extends Bloc<NewPostEvent, NewPostState>  {
           if(response.statusCode==201)  {
             Screen.showToast(mapResponse['message']);
             Screen.context.read<ChangeCupertinoTabBar>().toggle();
-            Screen.navigateRemoveUntil(Index());
+           appWidgets.navigateRemoveUntil(Index());
           }
           else {
             Screen.showToast(mapResponse['message']);

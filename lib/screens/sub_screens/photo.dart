@@ -76,8 +76,6 @@ class _PhotoState extends State<Photo>  {
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
                 children:<Widget>[
-            
-
                 Container(
                  
                   height: Screen.height/2,
